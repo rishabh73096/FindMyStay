@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unescaped-entities */
 
 import React, { useState, useEffect } from 'react';
 import { 
@@ -96,51 +95,7 @@ const FindMyStayHomepage = () => {
     return () => clearInterval(timer);
   }, []);
 
-  const Navbar = () => (
-    <nav className="fixed top-0 left-0 right-0 bg-slate-900/95 backdrop-blur-sm z-50 border-b border-blue-800/30">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          <div className="flex items-center space-x-2">
-            <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-blue-700 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-lg">F</span>
-            </div>
-            <span className="text-white font-bold text-xl">Find My Stay</span>
-          </div>
-          
-          <div className="hidden md:flex items-center space-x-8">
-            <a href="#" className="text-white hover:text-blue-400 transition-colors">Home</a>
-            <a href="#rooms" className="text-gray-300 hover:text-blue-400 transition-colors">Rooms</a>
-            <a href="#about" className="text-gray-300 hover:text-blue-400 transition-colors">About</a>
-            <a href="#contact" className="text-gray-300 hover:text-blue-400 transition-colors">Contact</a>
-            <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors">
-              Sign In
-            </button>
-          </div>
-          
-          <button
-            className="md:hidden text-white"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
-        </div>
-      </div>
-      
-      {isMenuOpen && (
-        <div className="md:hidden bg-slate-900 border-t border-blue-800/30">
-          <div className="px-4 py-4 space-y-2">
-            <a href="#" className="block text-white hover:text-blue-400 py-2">Home</a>
-            <a href="#rooms" className="block text-gray-300 hover:text-blue-400 py-2">Rooms</a>
-            <a href="#about" className="block text-gray-300 hover:text-blue-400 py-2">About</a>
-            <a href="#contact" className="block text-gray-300 hover:text-blue-400 py-2">Contact</a>
-            <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg mt-2">
-              Sign In
-            </button>
-          </div>
-        </div>
-      )}
-    </nav>
-  );
+
 
   const HeroSection = () => (
     <section className="relative h-screen overflow-hidden">
@@ -379,78 +334,11 @@ const FindMyStayHomepage = () => {
     </section>
   );
 
-  const Footer = () => (
-    <footer className="bg-slate-900 pt-16 pb-8 border-t border-slate-800">
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-          <div>
-            <div className="flex items-center space-x-2 mb-6">
-              <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-blue-700 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">F</span>
-              </div>
-              <span className="text-white font-bold text-xl">Find My Stay</span>
-            </div>
-            <p className="text-gray-300 mb-4">
-              Your trusted partner for finding the perfect accommodation worldwide.
-            </p>
-            <div className="flex space-x-4">
-              <Facebook className="text-gray-400 hover:text-blue-400 cursor-pointer transition-colors" size={20} />
-              <Twitter className="text-gray-400 hover:text-blue-400 cursor-pointer transition-colors" size={20} />
-              <Instagram className="text-gray-400 hover:text-blue-400 cursor-pointer transition-colors" size={20} />
-            </div>
-          </div>
-          
-          <div>
-            <h3 className="text-white font-semibold text-lg mb-4">Quick Links</h3>
-            <ul className="space-y-2">
-              <li><a href="#" className="text-gray-300 hover:text-blue-400 transition-colors">About Us</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-blue-400 transition-colors">Careers</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-blue-400 transition-colors">Press</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-blue-400 transition-colors">Blog</a></li>
-            </ul>
-          </div>
-          
-          <div>
-            <h3 className="text-white font-semibold text-lg mb-4">Support</h3>
-            <ul className="space-y-2">
-              <li><a href="#" className="text-gray-300 hover:text-blue-400 transition-colors">Help Center</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-blue-400 transition-colors">Terms of Service</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-blue-400 transition-colors">Privacy Policy</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-blue-400 transition-colors">Cancellation Policy</a></li>
-            </ul>
-          </div>
-          
-          <div>
-            <h3 className="text-white font-semibold text-lg mb-4">Contact Info</h3>
-            <div className="space-y-3">
-              <div className="flex items-center space-x-2 text-gray-300">
-                <Phone size={16} />
-                <span>+91 98765 43210</span>
-              </div>
-              <div className="flex items-center space-x-2 text-gray-300">
-                <Mail size={16} />
-                <span>help@findmystay.com</span>
-              </div>
-              <div className="flex items-center space-x-2 text-gray-300">
-                <MapPin size={16} />
-                <span>New Delhi, India</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <div className="border-t border-slate-800 pt-8 text-center">
-          <p className="text-gray-400">
-            © 2024 Find My Stay. All rights reserved. | Made with ❤️ in India
-          </p>
-        </div>
-      </div>
-    </footer>
-  );
+ 
 
   return (
     <div className="min-h-screen bg-slate-900">
-      <Navbar />
+     
       <HeroSection />
       <FeaturesSection />
       <RoomsSection />
