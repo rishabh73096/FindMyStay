@@ -78,10 +78,10 @@ const FeedbackForm = (props) => {
     setErrors(newErrors);
 
     if (!formValid) {
-      props.toaster({
-        type: "error",
-        message: "Please fix the errors in the form",
-      });
+      // props.toaster({
+      //   type: "error",
+      //   message: "Please fix the errors in the form",
+      // });
       return;
     }
 
@@ -126,7 +126,7 @@ const FeedbackForm = (props) => {
       </Head>
       <Navbar />
       <div className="min-h-[600px] md:mt-5 mt-24 md:mb-0 mb-10 bg-slate-900 pt-14">
-         <div className="absolute inset-0 bg-gradient-to-b from-orange-900/10 to-slate-900 pointer-events-none"></div>
+         <div className="absolute inset-0 bg-gradient-to-tr from-orange-600/10 via-transparent to-orange-400/10" />
         <div className="container mx-auto px-4 py-2 md:py-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 max-w-7xl mx-auto">
 

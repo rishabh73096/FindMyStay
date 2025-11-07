@@ -4,7 +4,7 @@ import { useState } from "react"
 import { Mail, Lock, Eye, EyeOff } from "lucide-react"
 import { useRouter } from "next/router"
 
-function singIn() {
+function SingIn() {
     const [formData, setFormData] = useState({
         email: "",
         password: "",
@@ -156,4 +156,4 @@ function singIn() {
 }
 
 
-export default singIn
+export default SingIn

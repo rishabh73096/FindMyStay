@@ -11,7 +11,7 @@ const testimonials = [
     comment:
       "Amazing experience! The booking process was seamless and the hotel exceeded all expectations. Highly recommended!",
     avatar:
-      "https://images.unsplash.com/photo-1494790108755-2616b612b550?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80",
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80",
   },
   {
     name: "Rahul Gupta",
