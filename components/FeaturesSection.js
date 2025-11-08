@@ -2,36 +2,40 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Award, Shield, Clock, CheckCircle } from "lucide-react";
+import { Home, Shield, Users, Clock } from "lucide-react";
 
 const features = [
   {
-    icon: Award,
-    title: "Best Price Guarantee",
-    desc: "Found a lower price elsewhere? We’ll match it instantly.",
-    image: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=600&q=80",
-    link: "/offers",
+    icon: Home,
+    title: "Affordable PGs & Hostels",
+    desc: "Find fully furnished, budget-friendly PGs across top Indore locations.",
+    image:
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80",
+    link: "/pgs",
   },
   {
     icon: Shield,
-    title: "Secure Booking",
-    desc: "Your data and payments are encrypted with top-tier security.",
-    image: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=600&q=80",
-    link: "/security",
+    title: "Verified & Safe Properties",
+    desc: "Every listing is verified to ensure secure and comfortable stays.",
+    image:
+      "https://images.unsplash.com/photo-1719530678751-83dcf8e1e899?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=880",
+    link: "/safety",
+  },
+  {
+    icon: Users,
+    title: "Community Living Experience",
+    desc: "Meet new friends, share spaces, and live in a positive environment.",
+    image:
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80",
+    link: "/community",
   },
   {
     icon: Clock,
-    title: "24/7 Support",
-    desc: "Need help? Our friendly team is available round the clock.",
-    image: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=600&q=80",
-    link: "/support",
-  },
-  {
-    icon: CheckCircle,
-    title: "Easy Cancellation",
-    desc: "Change of plans? Modify or cancel bookings with ease.",
-    image: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=600&q=80",
-    link: "/cancellation",
+    title: "Flexible Stay Plans",
+    desc: "Stay for a month or longer — extend, switch, or cancel with ease.",
+    image:
+      "https://images.unsplash.com/photo-1719530678751-83dcf8e1e899?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=880",
+    link: "/plans",
   },
 ];
 
@@ -47,7 +51,7 @@ const FeaturesSection = () => (
           Why Choose <span className="text-orange-500">Find My Stay?</span>
         </h2>
         <p className="text-gray-300 text-lg max-w-2xl mx-auto">
-          Discover comfort, security, and savings — all in one seamless booking experience.
+          Discover verified PGs & hostels in Indore that match your comfort, budget, and lifestyle.
         </p>
       </div>
 

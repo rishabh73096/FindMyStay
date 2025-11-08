@@ -7,33 +7,33 @@ import { Star, CheckCircle, ArrowRight } from "lucide-react";
 const rooms = [
   {
     id: 1,
-    name: "Deluxe Ocean View",
-    price: "₹8,999",
-    rating: 4.8,
+    name: "Comfort PG for Boys",
+    price: "₹6,499",
+    rating: 4.6,
     image:
-      "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    amenities: ["Free WiFi", "Ocean View", "King Bed", "Mini Bar"],
-    location: "Goa",
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    amenities: ["Free WiFi", "3 Meals", "Laundry", "Study Table"],
+    location: "Vijay Nagar, Indore",
   },
   {
     id: 2,
-    name: "Premium Suite",
-    price: "₹12,499",
-    rating: 4.9,
+    name: "Cozy Girls Hostel",
+    price: "₹7,999",
+    rating: 4.8,
     image:
-      "https://images.unsplash.com/photo-1618773928121-c32242e63f39?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    amenities: ["Free WiFi", "City View", "Balcony", "Room Service"],
-    location: "Mumbai",
+      "https://images.unsplash.com/photo-1590303200076-8dac38dde3ea?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=735",
+    amenities: ["Security 24/7", "AC Rooms", "Common Kitchen", "Gym Access"],
+    location: "Bhawarkua, Indore",
   },
   {
     id: 3,
-    name: "Royal Heritage Room",
-    price: "₹15,999",
-    rating: 4.7,
+    name: "Student PG with Balcony",
+    price: "₹5,999",
+    rating: 4.5,
     image:
-      "https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    amenities: ["Free WiFi", "Heritage View", "Luxury Bath", "Butler Service"],
-    location: "Rajasthan",
+      "https://images.unsplash.com/photo-1719530678751-83dcf8e1e899?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=880",
+    amenities: ["Attached Washroom", "Parking", "CCTV", "Housekeeping"],
+    location: "Geeta Bhawan, Indore",
   },
 ];
 
@@ -46,7 +46,7 @@ const fadeUp = {
   }),
 };
 
-export default function RoomsSection() {
+export default function PGSection() {
   return (
     <section id="rooms" className="py-20 bg-slate-900 relative overflow-hidden">
       {/* Orange gradient accent */}
@@ -61,7 +61,7 @@ export default function RoomsSection() {
             transition={{ duration: 0.6 }}
             className="text-4xl font-extrabold text-white mb-3 tracking-tight"
           >
-            Featured Rooms & Suites
+            Featured PGs & Hostels in Indore
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -69,11 +69,11 @@ export default function RoomsSection() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-gray-300 text-lg"
           >
-            Discover our handpicked selection of premium accommodations
+            Explore affordable and comfortable stays for students & professionals
           </motion.p>
         </div>
 
-        {/* Room Cards */}
+        {/* PG Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {rooms.map((room, i) => (
             <motion.div
@@ -124,19 +124,16 @@ export default function RoomsSection() {
                     <span className="text-2xl font-bold text-orange-400">
                       {room.price}
                     </span>
-                    <span className="text-gray-300 text-sm">/night</span>
+                    <span className="text-gray-300 text-sm">/month</span>
                   </div>
 
-                  <Link
-                    // href={`/rooms/${room.id}`}
-                    href={`/`}
-                  >
+                  <Link href={`/`}>
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-2 rounded-lg transition-colors flex items-center space-x-2"
                     >
-                      <span>Book Now</span>
+                      <span>View Details</span>
                       <ArrowRight size={16} />
                     </motion.button>
                   </Link>
@@ -154,7 +151,7 @@ export default function RoomsSection() {
               whileTap={{ scale: 0.95 }}
               className="bg-transparent border-2 border-orange-600 text-orange-400 hover:bg-orange-600 hover:text-white px-8 py-3 rounded-lg transition-all duration-300"
             >
-              View All Rooms
+              View All PGs
             </motion.button>
           </Link>
         </div>

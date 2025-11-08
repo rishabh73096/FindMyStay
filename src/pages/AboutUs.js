@@ -2,34 +2,34 @@ import React from "react";
 import Head from "next/head";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { FaHome, FaUsers, FaHandshake, FaMapMarkedAlt } from "react-icons/fa";
+import { FaBed, FaUserFriends, FaShieldAlt, FaMapMarkedAlt } from "react-icons/fa";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 
 const features = [
   {
-    icon: <FaHome className="text-4xl mb-3 text-orange-400" />,
-    title: "Easy Property Discovery",
+    icon: <FaBed className="text-4xl mb-3 text-orange-400" />,
+    title: "Find Verified PGs & Hostels",
     description:
-      "Find verified rental homes, apartments, and PGs with accurate details, images, and owner information – all in one place.",
+      "Discover comfortable and verified PGs and hostels in Indore with real images, amenities, and rent details — all in one place.",
   },
   {
-    icon: <FaUsers className="text-4xl mb-3 text-orange-400" />,
-    title: "Connecting Owners & Tenants",
+    icon: <FaUserFriends className="text-4xl mb-3 text-orange-400" />,
+    title: "Connect with Owners Directly",
     description:
-      "We simplify communication between owners and tenants through a transparent, reliable, and user-friendly platform.",
+      "Skip the brokers! Talk directly with PG or hostel owners, clarify doubts, and finalize your stay easily and transparently.",
   },
   {
-    icon: <FaHandshake className="text-4xl mb-3 text-orange-400" />,
-    title: "Secure & Hassle-Free Deals",
+    icon: <FaShieldAlt className="text-4xl mb-3 text-orange-400" />,
+    title: "Safe & Reliable Experience",
     description:
-      "Our platform ensures that every stay or property deal is handled safely and efficiently, with clear rental terms.",
+      "Every listing is verified for safety, cleanliness, and comfort — so you can stay worry-free during your student or working life.",
   },
   {
     icon: <FaMapMarkedAlt className="text-4xl mb-3 text-orange-400" />,
-    title: "Verified Listings Only",
+    title: "Explore Prime Indore Locations",
     description:
-      "All listings are verified to help you rent or stay confidently, without worrying about fake or outdated information.",
+      "Browse PGs and hostels across popular areas like Vijay Nagar, Palasia, Geeta Bhawan, and more — right from your screen.",
   },
 ];
 
@@ -42,17 +42,16 @@ const AboutUs = () => {
   return (
     <>
       <Head>
-        <title>About Us | Find My Stay</title>
+        <title>About Us | Find My Stay - PGs & Hostels in Indore</title>
         <meta
           name="description"
-          content="Find My Stay helps users easily discover verified rental homes and properties. We connect tenants and owners directly for secure and stress-free stays."
+          content="Find My Stay helps students and professionals easily discover verified PGs and Hostels in Indore. Book visits, connect directly with owners, and stay hassle-free."
         />
       </Head>
 
       <Navbar />
 
       <div className="relative py-16 bg-slate-900 text-white overflow-hidden">
-        {/* Soft gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-tr from-orange-600/10 via-transparent to-orange-400/10" />
 
         <div className="relative px-4 max-w-7xl mx-auto py-16">
@@ -66,18 +65,19 @@ const AboutUs = () => {
           >
             <div className="flex-1">
               <h1 className="text-[28px] md:text-[36px] font-bold mb-4 leading-tight">
-                Welcome to <span className="text-orange-500">Find My Stay</span>
+                Welcome to{" "}
+                <span className="text-orange-500">Find My Stay – Indore</span>
               </h1>
               <p className="text-gray-300 text-[16px] leading-relaxed mb-6">
-                Find My Stay is a trusted online platform that connects tenants and
-                property owners directly. Whether you’re looking for a room,
-                apartment, or house, our mission is to make finding your ideal stay
-                simple, transparent, and secure.
+                Find My Stay is Indore’s most trusted PG and Hostel discovery
+                platform. Whether you're a student or working professional, we
+                make it easy to find a comfortable, safe, and affordable place
+                to live — without middlemen.
               </p>
               <p className="text-gray-300 text-[16px] leading-relaxed mb-6">
-                We believe in empowering people to make confident rental decisions
-                through verified listings, real photos, and direct communication
-                between owners and tenants.
+                From single rooms to shared accommodations, explore verified
+                stays, check amenities, and even book a visit directly with
+                owners — all in just a few clicks.
               </p>
             </div>
             <motion.div
@@ -133,9 +133,10 @@ const AboutUs = () => {
               Our Mission & Vision
             </h2>
             <p className="text-gray-300 text-[16px] leading-relaxed max-w-3xl mx-auto">
-              Our mission is to make renting homes and finding stays effortless.
-              We aim to create a community where every user — tenant or owner —
-              can connect easily, trust confidently, and live comfortably.
+              Our mission is to simplify PG and hostel finding in Indore. We
+              envision a trusted community where students and working
+              professionals can find verified stays easily and safely. Your
+              comfort and convenience are our top priorities.
             </p>
           </motion.div>
 
@@ -148,16 +149,17 @@ const AboutUs = () => {
             className="text-center"
           >
             <h3 className="text-[24px] font-semibold text-white mb-3">
-              Start Your Journey with Find My Stay
+              Find Your Perfect Stay in Indore
             </h3>
             <p className="text-gray-300 mb-6">
-              Discover verified homes and connect directly with owners today.
+              Explore verified PGs and hostels near your college or workplace.
+              Book a visit now and move in stress-free!
             </p>
             <button
               onClick={() => (window.location.href = "/")}
               className="bg-orange-600 text-white px-6 py-3 rounded-lg text-[15px] hover:bg-orange-700 transition-all shadow-md shadow-orange-500/30"
             >
-              Explore Now
+              Book a Visit
             </button>
           </motion.div>
         </div>
