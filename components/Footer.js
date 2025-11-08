@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-import { Facebook, Twitter, Instagram, Mail, Phone, MapPin } from "lucide-react";
+import { Facebook, Twitter, Instagram, Mail, Phone, MapPin, Hotel } from "lucide-react";
 
 const Footer = () => {
   return (
@@ -12,13 +12,18 @@ const Footer = () => {
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-4">
         {/* Top Section */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
-          
+
           {/* Brand Section */}
           <div>
             <div className="flex items-center space-x-3 mb-6">
-              <div className="w-10 h-10 bg-gradient-to-r from-orange-500 to-orange-700 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">F</span>
-              </div>
+              <Link
+                href={"/"}>
+                <div className="w-10 h-10 bg-gradient-to-r from-orange-500 to-orange-700 rounded-lg flex items-center justify-center"
+
+                >
+                  <span className="text-white font-bold text-lg"><Hotel /></span>
+                </div>
+              </Link>
               <span className="text-white font-bold text-xl">Find My Stay</span>
             </div>
             <p className="text-gray-300 mb-6">
@@ -45,10 +50,9 @@ const Footer = () => {
               <div className="w-10 h-[2px] bg-orange-500 mt-2 rounded-full"></div>
             </h3>
             <ul className="space-y-2">
-              <li><Link href="/about" className="text-gray-300 hover:text-orange-400 transition-colors">About Us</Link></li>
-              <li><Link href="/careers" className="text-gray-300 hover:text-orange-400 transition-colors">Careers</Link></li>
-              <li><Link href="/press" className="text-gray-300 hover:text-orange-400 transition-colors">Press</Link></li>
-              <li><Link href="/blog" className="text-gray-300 hover:text-orange-400 transition-colors">Blog</Link></li>
+              <li><Link href="/" className="text-gray-300 hover:text-orange-400 transition-colors">Home</Link></li>
+              <li><Link href="/AboutUs" className="text-gray-300 hover:text-orange-400 transition-colors">About Us</Link></li>
+              <li><Link href="/ContactUs" className="text-gray-300 hover:text-orange-400 transition-colors">Contact Us</Link></li>
             </ul>
           </div>
 
@@ -59,10 +63,9 @@ const Footer = () => {
               <div className="w-10 h-[2px] bg-orange-500 mt-2 rounded-full"></div>
             </h3>
             <ul className="space-y-2">
-              <li><Link href="/help" className="text-gray-300 hover:text-orange-400 transition-colors">Help Center</Link></li>
-              <li><Link href="/terms" className="text-gray-300 hover:text-orange-400 transition-colors">Terms of Service</Link></li>
-              <li><Link href="/privacy" className="text-gray-300 hover:text-orange-400 transition-colors">Privacy Policy</Link></li>
-              <li><Link href="/cancellation" className="text-gray-300 hover:text-orange-400 transition-colors">Cancellation Policy</Link></li>
+              <li><Link href="/UseTerms" className="text-gray-300 hover:text-orange-400 transition-colors">Terms of Service</Link></li>
+              <li><Link href="/PrivacyPolicy" className="text-gray-300 hover:text-orange-400 transition-colors">Privacy Policy</Link></li>
+              <li><Link href="/CancilationPolicy" className="text-gray-300 hover:text-orange-400 transition-colors">Cancellation Policy</Link></li>
             </ul>
           </div>
 
@@ -83,7 +86,7 @@ const Footer = () => {
               </div>
               <div className="flex items-center space-x-2">
                 <MapPin size={16} className="text-orange-400" />
-                <span>New Delhi, India</span>
+                <span>Indore, India</span>
               </div>
             </div>
           </div>
@@ -98,7 +101,7 @@ const Footer = () => {
           </p>
         </div>
       </div>
-    </footer>
+    </footer >
   );
 };
 

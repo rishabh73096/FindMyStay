@@ -11,7 +11,7 @@ const testimonials = [
     comment:
       "Amazing experience! The booking process was seamless and the hotel exceeded all expectations. Highly recommended!",
     avatar:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80",
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d",
   },
   {
     name: "Rahul Gupta",
@@ -20,7 +20,7 @@ const testimonials = [
     comment:
       "Find My Stay made our vacation planning so easy. Great prices and excellent customer service!",
     avatar:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80",
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d",
   },
   {
     name: "Anjali Patel",
@@ -29,7 +29,7 @@ const testimonials = [
     comment:
       "Wonderful platform with great variety of hotels. The room was exactly as shown in photos.",
     avatar:
-      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80",
+      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80",
   },
 ];
 
@@ -83,14 +83,15 @@ export default function TestimonialsSection() {
               viewport={{ once: true }}
               className="bg-slate-800/80 border border-slate-700 p-6 rounded-2xl shadow-lg hover:shadow-orange-500/10 hover:-translate-y-1 transition-all duration-300"
             >
-              <div className="flex items-center mb-5">
-                <Image
-                  src={t.avatar}
-                  alt={t.name}
-                  width={50}
-                  height={50}
-                  className="rounded-full object-cover mr-4"
-                />
+              <div className=" flex items-center mb-5">
+                <div className="relative w-14 h-14 mr-5">
+                  <Image
+                    src={t.avatar}
+                    alt={t.name}
+                    fill
+                    className="rounded-full object-contain"
+                  />
+                </div>
                 <div>
                   <h4 className="text-white font-semibold text-lg">{t.name}</h4>
                   <p className="text-gray-400 text-sm">{t.location}</p>

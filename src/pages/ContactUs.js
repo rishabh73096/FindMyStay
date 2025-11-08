@@ -125,7 +125,7 @@ const FeedbackForm = (props) => {
         <title>Contact Us | Find My Stay</title>
       </Head>
       <Navbar />
-      <div className="min-h-[600px] md:mt-5 mt-24 md:mb-0 mb-10 bg-slate-900 pt-14">
+      <div className="min-h-[600px] md:mt-5 mt-14 md:mb-0 pb-10 bg-slate-900 pt-14">
          <div className="absolute inset-0 bg-gradient-to-tr from-orange-600/10 via-transparent to-orange-400/10" />
         <div className="container mx-auto px-4 py-2 md:py-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 max-w-7xl mx-auto">

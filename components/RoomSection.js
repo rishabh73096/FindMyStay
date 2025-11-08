@@ -127,7 +127,10 @@ export default function RoomsSection() {
                     <span className="text-gray-300 text-sm">/night</span>
                   </div>
 
-                  <Link href={`/rooms/${room.id}`}>
+                  <Link
+                    // href={`/rooms/${room.id}`}
+                    href={`/`}
+                  >
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
