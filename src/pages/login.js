@@ -22,8 +22,9 @@ function SingIn() {
         <div className="min-h-screen bg-black flex flex-col md:flex-row">
             {/* Image Section - Hidden on mobile, shown on md and up */}
             <div className="hidden md:flex md:flex-1 bg-neutral-900 items-center justify-center p-8">
-                <div className="w-full h-full max-h-[600px] bg-neutral-800 border border-neutral-700 rounded-2xl overflow-hidden">
-                    <img
+                <div className="relative w-full h-full max-h-[600px] bg-neutral-800 border border-neutral-700 rounded-2xl overflow-hidden">
+                    <Image
+                    fill
                         src="https://images.pexels.com/photos/31817684/pexels-photo-31817684.jpeg"
                         alt="WiFi password sign"
                         className="w-full h-full object-cover"

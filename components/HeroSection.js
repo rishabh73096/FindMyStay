@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { MapPin, Calendar, Users, Search } from "lucide-react";
+import Image from "next/image";
 
 const heroImages = [
   "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80",
@@ -26,15 +27,20 @@ const HeroSection = () => {
         {heroImages.map((image, index) => (
           <div
             key={index}
-            className={`absolute inset-0 transition-opacity duration-1000 ${
-              index === currentSlide ? "opacity-100" : "opacity-0"
-            }`}
+            className={`absolute inset-0 transition-opacity duration-1000 ${index === currentSlide ? "opacity-100" : "opacity-0"
+              }`}
           >
-            <img
-              src={image}
-              alt={`Hero ${index + 1}`}
-              className="w-full h-full object-cover"
-            />
+            <div className="relative w-full h-screen"> {/* set parent height */}
+              <Image
+                src={image}
+                alt={`Hero ${index + 1}`}
+                fill
+                className="object-cover w-full h-full"
+                sizes="100vw"
+                priority
+              />
+            </div>
+
             <div className="absolute inset-0 bg-black/60"></div>
           </div>
         ))}

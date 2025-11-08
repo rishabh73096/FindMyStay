@@ -21,9 +21,10 @@ function Signup() {
     <div className="min-h-screen bg-black flex flex-col md:flex-row">
       {/* Image Section - Hidden on mobile, shown on md and up */}
       <div className="hidden md:flex md:flex-1 bg-neutral-900 items-center justify-center p-8">
-        <div className="w-full h-full max-h-[600px] bg-neutral-800 border border-neutral-700 rounded-2xl overflow-hidden">
-          <img
+        <div className="relative w-full h-full max-h-[600px] bg-neutral-800 border border-neutral-700 rounded-2xl overflow-hidden">
+          <Image
             src="https://images.unsplash.com/photo-1740101957423-d8e97afb661b?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=687"
+            fill
             alt="Professional workspace"
             className="w-full h-full object-cover"
           />
