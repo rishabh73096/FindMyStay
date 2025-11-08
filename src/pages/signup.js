@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { Mail, Lock, User } from "lucide-react"
 import { useRouter } from "next/router"
+import Image from "next/image"
 
 function Signup() {
   const router = useRouter()

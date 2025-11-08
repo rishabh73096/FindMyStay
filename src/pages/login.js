@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { Mail, Lock, Eye, EyeOff } from "lucide-react"
 import { useRouter } from "next/router"
+import Image from "next/image"
 
 function SingIn() {
     const [formData, setFormData] = useState({
@@ -24,7 +25,7 @@ function SingIn() {
             <div className="hidden md:flex md:flex-1 bg-neutral-900 items-center justify-center p-8">
                 <div className="relative w-full h-full max-h-[600px] bg-neutral-800 border border-neutral-700 rounded-2xl overflow-hidden">
                     <Image
-                    fill
+                        fill
                         src="https://images.pexels.com/photos/31817684/pexels-photo-31817684.jpeg"
                         alt="WiFi password sign"
                         className="w-full h-full object-cover"
