@@ -4,11 +4,8 @@ import { useRouter } from "next/router";
 import { Api } from "../../services/service";
 import { motion } from "framer-motion";
 import Head from "next/head";
-import Navbar from "../../components/Navbar";
-import Footer from "../../components/Footer";
 
 const FeedbackForm = (props) => {
-
   const router = useRouter();
   const [formData, setFormData] = useState({
     fullName: "",
@@ -78,16 +75,16 @@ const FeedbackForm = (props) => {
     setErrors(newErrors);
 
     if (!formValid) {
-      // props.toaster({
-      //   type: "error",
-      //   message: "Please fix the errors in the form",
-      // });
+      props.toaster({
+        type: "error",
+        message: "Please fix the errors in the form",
+      });
       return;
     }
 
     props.loader(true);
 
-    Api("post", "createFeedback", formData).then(
+    Api("post", "contact/createFeedback", formData).then(
       (res) => {
         props.loader(false);
         if (res?.status) {
@@ -124,7 +121,7 @@ const FeedbackForm = (props) => {
       <Head>
         <title>Contact Us | Find My Stay</title>
       </Head>
-      <Navbar />
+  
       <div className="min-h-[600px] md:mt-5 mt-14 md:mb-0 pb-10 bg-slate-900 pt-14">
          <div className="absolute inset-0 bg-gradient-to-tr from-orange-600/10 via-transparent to-orange-400/10" />
         <div className="container mx-auto px-4 py-2 md:py-10">
@@ -301,7 +298,7 @@ const FeedbackForm = (props) => {
           </div>
         </div>
       </div>
-      <Footer />
+ 
     </>
   );
 };

@@ -49,7 +49,7 @@ const AboutUs = () => {
         />
       </Head>
 
-      <Navbar />
+   
 
       <div className="relative py-16 bg-slate-900 text-white overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-tr from-orange-600/10 via-transparent to-orange-400/10" />
@@ -164,8 +164,6 @@ const AboutUs = () => {
           </motion.div>
         </div>
       </div>
-
-      <Footer />
     </>
   );
 };

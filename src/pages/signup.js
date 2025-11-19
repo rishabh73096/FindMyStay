@@ -1,158 +1,182 @@
+import { useState, useContext } from "react";
+import { Mail, Lock, User, Phone } from "lucide-react";
+import { useRouter } from "next/router";
+import Image from "next/image";
+import { userContext } from "@/pages/_app";
+import { Api } from "../../services/service";
+import { toast } from "react-toastify";
 
+function Signup(props) {
+  const router = useRouter();
+  const [user, setUser] = useContext(userContext);
 
-import { useState } from "react"
-import { Mail, Lock, User } from "lucide-react"
-import { useRouter } from "next/router"
-import Image from "next/image"
-
-function Signup() {
-  const router = useRouter()
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
-  })
-  const [focusedField, setFocusedField] = useState(null)
+    phone: "",
+  });
+
+  const [focusedField, setFocusedField] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   const handleInputChange = (field, value) => {
-    setFormData((prev) => ({ ...prev, [field]: value }))
-  }
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const submit = async (e) => {
+    e.preventDefault();
+    setSubmitted(true);
+
+    if (!formData.email || !formData.password || !formData.name) {
+      toast.error("Please fill all fields");
+      return;
+    }
+
+    try {
+      
+      props?.loader?.(true);
+
+      const res = await Api("post", "auth/register", formData, router);
+      const user = res.data.user;
+      localStorage.setItem("userDetail", JSON.stringify(user));
+      localStorage.setItem("token", res.data.token);
+      setUser(user);
+       router.push("/");
+      toast.success(res.data?.message || "Account created");
+     
+    } catch (error) {
+      toast.error(error?.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+      props?.loader?.(false);
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-black flex flex-col md:flex-row">
-      {/* Image Section - Hidden on mobile, shown on md and up */}
-      <div className="hidden md:flex md:flex-1 bg-neutral-900 items-center justify-center p-8">
-        <div className="relative w-full h-full max-h-[600px] bg-neutral-800 border border-neutral-700 rounded-2xl overflow-hidden">
+    <div className="min-h-screen bg-black flex flex-col md:flex-row mt-14">
+
+      <div className="hidden md:flex md:flex-1 bg-neutral-900 items-center justify-center p-6">
+        <div className="relative w-full h-full max-h-[700px] bg-neutral-800 border border-neutral-700 rounded-2xl overflow-hidden">
           <Image
-            src="https://images.unsplash.com/photo-1740101957423-d8e97afb661b?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=687"
+            src="https://images.unsplash.com/photo-1740101957423-d8e97afb661b?auto=format&fit=crop&q=80&w=687"
             fill
-            alt="Professional workspace"
+            alt="Signup cover"
             className="w-full h-full object-cover"
           />
         </div>
       </div>
 
-      {/* Form Section */}
+      {/* ========== RIGHT FORM SECTION ========== */}
       <div className="flex-1 bg-black flex items-center justify-center p-4 md:p-8">
-        <div className="w-full max-w-md bg-neutral-900 border border-neutral-700 rounded-2xl p-8 md:p-10">
-          {/* Header */}
+        <div className="w-full max-w-lg bg-neutral-900 border border-neutral-700 rounded-2xl p-4 md:p-6">
+
           <div className="text-center mb-8">
-            <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">Create Account</h1>
-            <p className="text-neutral-400 text-base">Join us today and get started</p>
+            <h1 className="text-3xl font-bold text-white">Create Account</h1>
+            <p className="text-neutral-400 mt-1">Join us today and get started</p>
           </div>
 
-          {/* Form */}
-          <form className="space-y-6">
-            {/* Name Field */}
-            <div className="space-y-2">
-              <label htmlFor="name" className="block text-sm font-medium text-white">
-                Full Name
-              </label>
-              <div className="relative">
-                <User
-                  className={
-                    "absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 transition-colors duration-200 " +
-                    (focusedField === "name" ? "text-orange-500" : "text-neutral-500")
-                  }
-                />
+          {/* ========= FORM ========= */}
+          <form className="space-y-4" onSubmit={submit}>
+
+            {/* Name */}
+            <div>
+              <label className="text-sm text-white">Full Name</label>
+              <div className="relative mt-1">
+                <User className={`absolute left-3 top-3 w-5 ${focusedField === "name" ? "text-orange-500" : "text-neutral-500"}`} />
                 <input
-                  id="name"
                   type="text"
+                  placeholder="Enter your full name"
                   value={formData.name}
                   onChange={(e) => handleInputChange("name", e.target.value)}
                   onFocus={() => setFocusedField("name")}
                   onBlur={() => setFocusedField(null)}
-                  placeholder="Enter your full name"
-                  className={
-                    "w-full pl-11 pr-4 py-3.5 bg-neutral-800 rounded-xl text-white text-base placeholder-neutral-500 outline-none transition-colors duration-200 border-2 " +
-                    (focusedField === "name" ? "border-orange-500" : "border-neutral-600 hover:border-neutral-500")
-                  }
+                  className={`w-full pl-11 pr-4 py-3.5 bg-neutral-800 text-white rounded-xl border-2 outline-none 
+                      ${focusedField === "name" ? "border-orange-500" : "border-neutral-600 hover:border-neutral-500"}`}
                 />
               </div>
             </div>
 
-            {/* Email Field */}
-            <div className="space-y-2">
-              <label htmlFor="email" className="block text-sm font-medium text-white">
-                Email Address
-              </label>
-              <div className="relative">
-                <Mail
-                  className={
-                    "absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 transition-colors duration-200 " +
-                    (focusedField === "email" ? "text-orange-500" : "text-neutral-500")
-                  }
-                />
+            {/* Email */}
+            <div>
+              <label className="text-sm text-white">Email Address</label>
+              <div className="relative mt-1">
+                <Mail className={`absolute left-3 top-3 w-5 ${focusedField === "email" ? "text-orange-500" : "text-neutral-500"}`} />
                 <input
-                  id="email"
                   type="email"
+                  placeholder="Enter your email"
                   value={formData.email}
                   onChange={(e) => handleInputChange("email", e.target.value)}
                   onFocus={() => setFocusedField("email")}
                   onBlur={() => setFocusedField(null)}
-                  placeholder="Enter your email address"
-                  className={
-                    "w-full pl-11 pr-4 py-3.5 bg-neutral-800 rounded-xl text-white text-base placeholder-neutral-500 outline-none transition-colors duration-200 border-2 " +
-                    (focusedField === "email" ? "border-orange-500" : "border-neutral-600 hover:border-neutral-500")
-                  }
+                  className={`w-full pl-11 pr-4 py-3.5 bg-neutral-800 text-white rounded-xl border-2 outline-none 
+                      ${focusedField === "email" ? "border-orange-500" : "border-neutral-600 hover:border-neutral-500"}`}
                 />
               </div>
             </div>
 
-            {/* Password Field */}
-            <div className="space-y-2">
-              <label htmlFor="password" className="block text-sm font-medium text-white">
-                Password
-              </label>
-              <div className="relative">
-                <Lock
-                  className={
-                    "absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 transition-colors duration-200 " +
-                    (focusedField === "password" ? "text-orange-500" : "text-neutral-500")
-                  }
-                />
+            {/* Password */}
+            <div>
+              <label className="text-sm text-white">Password</label>
+              <div className="relative mt-1">
+                <Lock className={`absolute left-3 top-3 w-5 ${focusedField === "password" ? "text-orange-500" : "text-neutral-500"}`} />
                 <input
-                  id="password"
                   type="password"
+                  placeholder="Create a password"
                   value={formData.password}
                   onChange={(e) => handleInputChange("password", e.target.value)}
                   onFocus={() => setFocusedField("password")}
                   onBlur={() => setFocusedField(null)}
-                  placeholder="Create a strong password"
-                  className={
-                    "w-full pl-11 pr-4 py-3.5 bg-neutral-800 rounded-xl text-white text-base placeholder-neutral-500 outline-none transition-colors duration-200 border-2 " +
-                    (focusedField === "password" ? "border-orange-500" : "border-neutral-600 hover:border-neutral-500")
-                  }
+                  className={`w-full pl-11 pr-4 py-3.5 bg-neutral-800 text-white rounded-xl border-2 outline-none 
+                      ${focusedField === "password" ? "border-orange-500" : "border-neutral-600 hover:border-neutral-500"}`}
                 />
               </div>
             </div>
 
-            {/* Submit Button */}
+            {/* Phone */}
+            <div>
+              <label className="text-sm text-white">Phone Number</label>
+              <div className="relative mt-1">
+                <Phone className={`absolute left-3 top-3 w-5 ${focusedField === "phone" ? "text-orange-500" : "text-neutral-500"}`} />
+                <input
+                  type="tel"
+                  placeholder="Enter phone number"
+                  value={formData.phone}
+                  onChange={(e) => handleInputChange("phone", e.target.value)}
+                  onFocus={() => setFocusedField("phone")}
+                  onBlur={() => setFocusedField(null)}
+                  className={`w-full pl-11 pr-4 py-3.5 bg-neutral-800 text-white rounded-xl border-2 outline-none 
+                      ${focusedField === "phone" ? "border-orange-500" : "border-neutral-600 hover:border-neutral-500"}`}
+                />
+              </div>
+            </div>
+
+            {/* Submit */}
             <button
               type="submit"
-              className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3.5 px-4 rounded-xl transition-colors duration-200 text-base mt-8"
+              disabled={loading}
+              className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3.5 rounded-xl mt-6"
             >
-              Create Account
+              {loading ? "Creating..." : "Create Account"}
             </button>
           </form>
 
-          {/* Sign In Link */}
-          <div className="text-center mt-8">
-            <p className="text-neutral-400 text-base">
-              Already have an account?{" "}
-              <button
+          {/* Login Link */}
+          <p className="text-center text-neutral-400 mt-6">
+            Already have an account?{" "}
+            <button
+              onClick={() => router.push("/login")}
+              className="text-orange-500 hover:text-orange-400"
+            >
+              Sign in here
+            </button>
+          </p>
 
-                onClick={() => router.push("login")}
-                className="text-orange-500 hover:text-orange-400 font-medium transition-colors duration-200"
-              >
-                Sign in here
-              </button>
-            </p>
-          </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default Signup
+export default Signup;

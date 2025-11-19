@@ -36,7 +36,7 @@ const Layout = ({ children, loader, toaster }) => {
       </div>
 
      
-      <div className="pt-[88px] md:pt-[170px] max-w-screen overflow-x-hidden z-0">
+      <div className="max-w-screen overflow-x-hidden z-0">
         <main>{children}</main>
       </div>
 

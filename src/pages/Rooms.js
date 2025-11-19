@@ -1,39 +1,145 @@
-import React from "react";
-import { Clock } from "lucide-react";
-import wrapper from "../../components/wrapper";
+import React, { useEffect, useState } from "react";
+import { CiSearch } from "react-icons/ci";
+import { FaCalendarAlt, FaLongArrowAltRight, FaUsers } from "react-icons/fa";
+import { TiPlus, TiMinus } from "react-icons/ti";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import Image from "next/image";
+import { AlertTriangle, Search } from "lucide-react";
 
-const Rooms = () => {
-    return (
-        <wrapper>
-            <div className="flex flex-col justify-center items-center min-h-screen bg-gradient-to-b from-[#fffaf5] to-[#f9f4f0] dark:from-[#0f0f0f] dark:to-[#1a1a1a] px-4 text-center transition-all duration-300">
-                <div className="bg-white/80 dark:bg-[#222]/80 backdrop-blur-lg p-10 rounded-3xl shadow-lg border border-[#D9AB83]/40">
-                    <div className="flex justify-center mb-5">
-                        <Clock size={50} className="text-[#D9AB83] animate-pulse" />
-                    </div>
+function FindRooms() {
+  const [propertyData, setPropertyData] = useState([]);
+  const [checkindate, setCheckInDate] = useState("");
+  const [checkoutdate, setCheckOutDate] = useState("");
+  const [maxGuest, setMaxGuest] = useState(1);
 
-                    <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-3">
-                        Rooms Section – Coming Soon
-                    </h1>
+  const handleMove = (id) => {
+    router.push(`/tanant_booking/${id}`);
+  };
 
-                    <p className="text-gray-700 dark:text-gray-300 text-lg max-w-xl mx-auto leading-relaxed">
-                        We're working hard to bring you the best room and PG booking experience.
-                        Stay tuned — this feature will be available soon!
-                    </p>
+  return (
+    <div className="md:max-w-7xl w-full mx-auto px-4 py-16 min-h-screen">
 
-                    <button
-                        onClick={() => (window.location.href = "/")}
-                        className="mt-8 bg-orange-500 text-white font-medium px-6 py-3 rounded-xl transition-all duration-300"
-                    >
-                        Back to Home
-                    </button>
-                </div>
+      {/* 🔍 Search Box */}
+      <div className="border-[2px] border-orange-500 mt-8 rounded-3xl px-4 py-4 bg-white shadow-sm">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
 
-                <footer className="mt-10 text-gray-500 dark:text-gray-400 text-sm">
-                    © {new Date().getFullYear()} Find My Stay. All rights reserved.
-                </footer>
+          {/* Location */}
+          <div className="flex items-center gap-2 w-full md:w-[200px]">
+            <CiSearch className="text-black text-lg" />
+            <input
+              type="text"
+              placeholder="Search Indore PG, Hostel..."
+              className="w-full outline-none text-black text-sm"
+            />
+          </div>
+
+          <div className="hidden md:block border-l-2 h-8 border-gray-300" />
+
+          {/* Dates */}
+          <div className="flex items-center gap-2">
+            <FaCalendarAlt className="text-black" />
+
+            <DatePicker
+              selected={checkindate}
+              onChange={(date) => setCheckInDate(date)}
+              minDate={new Date()}
+              placeholderText="Move In"
+              className="w-24 h-10 border rounded-lg text-black text-center"
+            />
+
+            <FaLongArrowAltRight className="text-black hidden md:block" />
+
+            <DatePicker
+              selected={checkoutdate}
+              onChange={(date) => setCheckOutDate(date)}
+              minDate={new Date()}
+              placeholderText="Move Out"
+              className="w-28 h-10 border rounded-lg text-black text-center"
+            />
+          </div>
+
+          <div className="hidden md:block border-l-2 h-8 border-gray-300" />
+
+          {/* Guests */}
+          <div className="flex items-center gap-3">
+            <FaUsers className="text-black" />
+            <p className="text-black font-medium">Guests</p>
+
+            <div className="flex items-center gap-2">
+              <TiMinus
+                onClick={() => setMaxGuest((p) => (p > 1 ? p - 1 : 1))}
+                className="cursor-pointer border text-lg text-white rounded-full bg-orange-500"
+              />
+              <p className="font-semibold text-black">{maxGuest}</p>
+              <TiPlus
+                onClick={() => setMaxGuest((p) => p + 1)}
+                className="cursor-pointer border text-lg text-white rounded-full bg-orange-500"
+              />
             </div>
-        </wrapper>
-    );
-};
+          </div>
 
-export default Rooms;
+          {/* Search Button */}
+          <button className="bg-orange-500 text-white py-2 px-6 rounded-full shadow-md active:scale-95">
+            Search
+          </button>
+        </div>
+      </div>
+
+      {/* 📌 Property Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
+        {propertyData.map((item) => (
+          <div
+            key={item._id}
+            className="bg-gray-100 rounded-3xl shadow-md overflow-hidden cursor-pointer"
+            onClick={() => handleMove(item.slug)}
+          >
+            <div className="relative h-48">
+              <Image
+                src={item.image[0]}
+                width={500}
+                height={500}
+                className="w-full h-full object-cover"
+                alt="PG Rooms"
+              />
+            </div>
+
+            <div className="bg-orange-500 text-white px-4 py-2 text-center">
+              <span className="text-sm font-medium">{item.ownername}</span>
+            </div>
+
+            <div className="px-4 py-3 text-black text-sm">
+              <p className="font-semibold">{item.title}</p>
+              <p className="text-gray-600 mt-1">{item.location}</p>
+              <p className="text-orange-500 font-bold mt-2">
+                ₹ {item.price} / month
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Empty States */}
+      {propertyData.length === 0 && (
+        <EmptyState
+          icon={<Search className="w-10 h-10" />}
+          title="Search PG Rooms in Indore"
+          desc="Enter details to find rooms"
+          color="orange"
+        />
+      )}
+    </div>
+  );
+}
+
+export default FindRooms;
+
+const EmptyState = ({ icon, title, desc, color }) => (
+  <div className="flex flex-col justify-center items-center text-center h-[500px] mb-20">
+    <div className={`p-6 rounded-full mb-3 bg-${color}-100 text-${color}-600`}>
+      {icon}
+    </div>
+    <p className="text-2xl font-semibold text-gray-800">{title}</p>
+    <p className="text-gray-500 text-sm mt-2">{desc}</p>
+  </div>
+);

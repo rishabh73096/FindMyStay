@@ -4,7 +4,7 @@ import { MapPin, Calendar, Users, Search } from "lucide-react";
 import Image from "next/image";
 
 const heroImages = [
-  "https://images.unsplash.com/photo-1587135899865-a4f9880a0892?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80", // PG interior
+  "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80", // PG interior
   "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80", // hostel common room
   "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80", // student PG building
 ];
@@ -20,7 +20,7 @@ const HeroSection = () => {
   }, []);
 
   return (
-    <section className="relative h-[90vh] md:h-screen overflow-hidden">
+    <section className="relative h-[98vh] md:h-screen ">
       {/* Background Slideshow */}
       <div className="absolute inset-0">
         {heroImages.map((image, index) => (
@@ -44,9 +44,9 @@ const HeroSection = () => {
       </div>
 
       {/* Content Overlay */}
-      <div className="relative z-10 flex items-center justify-center h-full px-4">
+      <div className="relative z-10 flex items-center justify-center h-full px-4 md:mt-0 mt-14">
         <div className="text-center text-white max-w-4xl mx-auto animate-fade-in">
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+          <h1 className="text-4xl md:text-7xl font-bold mb-6 leading-tight">
             Discover Your Ideal <span className="text-orange-500">PG / Hostel in Indore</span>
           </h1>
 

@@ -1,18 +1,20 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { Menu, X, User, LogOut, Hotel } from "lucide-react";
+import React, { useState, useEffect, useContext } from "react";
+import { Menu, X, User, LogOut, Hotel, CalendarCheck } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { userContext } from "@/pages/_app";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const router = useRouter();
+  const [user, setUser] = useContext(userContext)
 
-  // ✅ Check login status from localStorage on mount
+
   useEffect(() => {
-    const token = localStorage.getItem("authToken");
-    if (token) setIsLoggedIn(true);
+    // const token = localStorage.getItem("token");
+    if (user) setIsLoggedIn(true);
   }, []);
 
   const handleLogout = () => {
@@ -20,6 +22,8 @@ const Navbar = () => {
     setIsLoggedIn(false);
     router.push("/login");
   };
+
+  const userInitial = user?.name ? user?.name.charAt(0).toUpperCase() : "U";
 
   return (
     <nav className="fixed top-0 left-0 right-0 bg-white backdrop-blur-md z-50 border-b border-orange-200 shadow-md">
@@ -33,7 +37,7 @@ const Navbar = () => {
             <span className="text-gray-900 font-bold text-xl">Find My Stay</span>
           </Link>
 
-          
+
           <div className="hidden md:flex items-center space-x-8">
             <Link href="/" className="text-gray-800 hover:text-orange-500 transition-colors">
               Home
@@ -48,35 +52,67 @@ const Navbar = () => {
               Contact
             </Link>
 
-            {!isLoggedIn ? (
-              <button
-                onClick={() => router.push("/login")}
-                className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-lg font-medium transition-all"
-              >
-                Sign In
-              </button>
-            ) : (
-              <div className="flex items-center space-x-4">
-                <Link
-                  href="/profile"
-                  className="text-gray-700 hover:text-orange-500 flex items-center gap-1"
-                >
-                  <User size={18} /> My Profile
-                </Link>
-                <Link
-                  href="/bookings"
-                  className="text-gray-700 hover:text-orange-500"
-                >
-                  My Bookings
-                </Link>
+            <div className="relative">
+              {/* If NOT logged in */}
+              {!isLoggedIn ? (
                 <button
-                  onClick={handleLogout}
-                  className="flex items-center gap-1 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-all"
+                  onClick={() => {
+                    router.push("/login");
+                    setIsMenuOpen(false);
+                  }}
+                  className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg"
                 >
-                  <LogOut size={16} /> Logout
+                  Sign In
                 </button>
-              </div>
-            )}
+              ) : (
+                <>
+                  {/* Avatar Button */}
+                  <button
+                    onClick={() => setIsMenuOpen(!isMenuOpen)}
+                    className="w-10 h-10 flex cursor-pointer items-center justify-center bg-orange-500 text-white rounded-full font-bold"
+                  >
+                    {userInitial}
+                  </button>
+
+               
+                  {isMenuOpen && (
+                    <div className="absolute right-0 mt-3 w-48 bg-white shadow-xl rounded-xl border border-gray-200 p-2 z-50">
+
+                      <Link
+                        href="/profile"
+                        onClick={() => setIsMenuOpen(false)}
+                        className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 text-gray-800 transition-all"
+                      >
+                        <User size={18} className="text-orange-500" />
+                        <span>My Profile</span>
+                      </Link>
+
+                      <Link
+                        href="/bookings"
+                        onClick={() => setIsMenuOpen(false)}
+                        className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 text-gray-800 transition-all"
+                      >
+                        <CalendarCheck size={18} className="text-orange-500" />
+                        <span>My Bookings</span>
+                      </Link>
+
+                      <button
+                        onClick={() => {
+                          handleLogout();
+                          setIsMenuOpen(false);
+                        }}
+                        className="flex items-center gap-3 w-full px-3 py-2 rounded-lg text-red-600 hover:bg-red-50 transition-all mt-1"
+                      >
+                        <LogOut size={18} />
+                        <span>Logout</span>
+                      </button>
+
+                    </div>
+                  )}
+
+                </>
+              )}
+            </div>
           </div>
 
           {/* MOBILE MENU BUTTON */}
@@ -89,7 +125,7 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* MOBILE MENU */}
+
       {isMenuOpen && (
         <div className="md:hidden bg-white border-t border-orange-200 shadow-sm">
           <div className="px-4 py-4 space-y-2">
@@ -122,43 +158,62 @@ const Navbar = () => {
               Contact
             </Link>
 
-            {!isLoggedIn ? (
-              <button
-                onClick={() => {
-                  router.push("/login");
-                  setIsMenuOpen(false);
-                }}
-                className="w-full bg-orange-500 hover:bg-orange-600 text-white py-2 rounded-lg mt-2"
-              >
-                Sign In
-              </button>
-            ) : (
-              <>
-                <Link
-                  href="/profile"
-                  className="block text-gray-800 hover:text-orange-500 py-2"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  My Profile
-                </Link>
-                <Link
-                  href="/bookings"
-                  className="block text-gray-800 hover:text-orange-500 py-2"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  My Bookings
-                </Link>
+
+            <div className="relative">
+              {/* If NOT logged in */}
+              {!isLoggedIn ? (
                 <button
                   onClick={() => {
-                    handleLogout();
+                    router.push("/login");
                     setIsMenuOpen(false);
                   }}
-                  className="w-full bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg mt-2"
+                  className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg"
                 >
-                  Logout
+                  Sign In
                 </button>
-              </>
-            )}
+              ) : (
+                <>
+                  {/* Avatar Button */}
+                  <button
+                    onClick={() => setIsMenuOpen(!isMenuOpen)}
+                    className="w-10 h-10 flex items-center justify-center bg-orange-500 text-white rounded-full font-bold"
+                  >
+                    {userInitial}
+                  </button>
+
+                  {/* Dropdown Menu */}
+                  {isMenuOpen && (
+                    <div className="absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-lg border p-2 z-50">
+                      <Link
+                        href="/profile"
+                        className="block text-gray-800 hover:text-orange-500 py-2"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        My Profile
+                      </Link>
+
+                      <Link
+                        href="/bookings"
+                        className="block text-gray-800 hover:text-orange-500 py-2"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        My Bookings
+                      </Link>
+
+                      <button
+                        onClick={() => {
+                          handleLogout();
+                          setIsMenuOpen(false);
+                        }}
+                        className="w-full bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg mt-2"
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
           </div>
         </div>
       )}
