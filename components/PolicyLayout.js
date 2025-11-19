@@ -7,7 +7,7 @@ import Footer from "./Footer";
 export default function PolicyLayout({ title, children }) {
     return (
         <>
-            <Navbar />
+            
             <div className="min-h-screen bg-white dark:bg-slate-900 text-gray-900 dark:text-gray-100">
                 <div className="max-w-6xl mx-auto px-4 py-12 mt-16">
                     <header className="mb-8">
@@ -30,7 +30,7 @@ export default function PolicyLayout({ title, children }) {
                     </footer>
                 </div>
             </div>
-            <Footer />
+            
         </>
     );
 }
