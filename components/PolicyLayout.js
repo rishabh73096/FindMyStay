@@ -30,7 +30,7 @@ export default function PolicyLayout({ title, children }) {
                     </footer>
                 </div>
             </div>
-            
+            <Footer />
         </>
     );
 }
