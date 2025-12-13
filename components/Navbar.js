@@ -9,12 +9,13 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const router = useRouter();
-  const [user, setUser] = useContext(userContext)
-
+  const [user, setUser] = useContext(userContext);
 
   useEffect(() => {
-    // const token = localStorage.getItem("token");
-    if (user) setIsLoggedIn(true);
+    const token = localStorage.getItem("token");
+    console.log(token, user);
+
+    if (user && token) setIsLoggedIn(true);
   }, []);
 
   const handleLogout = () => {
@@ -34,21 +35,34 @@ const Navbar = () => {
             <div className="w-10 h-10 bg-gradient-to-r from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
               <Hotel className="text-white" size={20} />
             </div>
-            <span className="text-gray-900 font-bold text-xl">Find My Stay</span>
+            <span className="text-gray-900 font-bold text-xl">
+              Find My Stay
+            </span>
           </Link>
 
-
           <div className="hidden md:flex items-center space-x-8">
-            <Link href="/" className="text-gray-800 hover:text-orange-500 transition-colors">
+            <Link
+              href="/"
+              className="text-gray-800 hover:text-orange-500 transition-colors"
+            >
               Home
             </Link>
-            <Link href="/Rooms" className="text-gray-800 hover:text-orange-500 transition-colors">
+            <Link
+              href="/Rooms"
+              className="text-gray-800 hover:text-orange-500 transition-colors"
+            >
               Rooms
             </Link>
-            <Link href="/AboutUs" className="text-gray-800 hover:text-orange-500 transition-colors">
+            <Link
+              href="/AboutUs"
+              className="text-gray-800 hover:text-orange-500 transition-colors"
+            >
               About
             </Link>
-            <Link href="/ContactUs" className="text-gray-800 hover:text-orange-500 transition-colors">
+            <Link
+              href="/ContactUs"
+              className="text-gray-800 hover:text-orange-500 transition-colors"
+            >
               Contact
             </Link>
 
@@ -74,10 +88,8 @@ const Navbar = () => {
                     {userInitial}
                   </button>
 
-               
                   {isMenuOpen && (
                     <div className="absolute right-0 mt-3 w-48 bg-white shadow-xl rounded-xl border border-gray-200 p-2 z-50">
-
                       <Link
                         href="/profile"
                         onClick={() => setIsMenuOpen(false)}
@@ -106,10 +118,8 @@ const Navbar = () => {
                         <LogOut size={18} />
                         <span>Logout</span>
                       </button>
-
                     </div>
                   )}
-
                 </>
               )}
             </div>
@@ -124,7 +134,6 @@ const Navbar = () => {
           </button>
         </div>
       </div>
-
 
       {isMenuOpen && (
         <div className="md:hidden bg-white border-t border-orange-200 shadow-sm">
@@ -157,7 +166,6 @@ const Navbar = () => {
             >
               Contact
             </Link>
-
 
             <div className="relative">
               {/* If NOT logged in */}

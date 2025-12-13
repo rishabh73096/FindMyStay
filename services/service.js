@@ -30,11 +30,12 @@ function Api(method, url, data, router, params) {
           ) {
             if (
               message.toLowerCase().includes("jwt expired") ||
+              message.toLowerCase().includes("No token provided") ||
               message.toLowerCase().includes("unauthorized")
             ) {
               localStorage.removeItem("token");
               localStorage.removeItem("userDetail");
-              router?.push("/signIn");
+              router?.push("/login");
             }
           }
 

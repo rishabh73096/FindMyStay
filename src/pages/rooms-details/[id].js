@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Home,
   ArrowRight,
@@ -6,49 +6,23 @@ import {
   Users,
   MapPin,
   IndianRupee,
-  Calendar,
-  Upload,
   X,
   CheckCircle,
 } from "lucide-react";
 
-function PropertyDetails() {
-  // Sample property data based on your schema
-  const [propertyData] = useState({
-    _id: "prop123",
-    propertyName: "Sunrise PG",
-    roomType: "Double",
-    pricePerMonth: 8500,
-    beds: {
-      total: 10,
-      available: 3,
-    },
-    genderAllowed: "Boys",
-    address: {
-      city: "Fatehpur",
-      state: "Uttar Pradesh",
-      pincode: "212601",
-    },
-    images: [
-      "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800",
-      "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800",
-      "https://images.unsplash.com/photo-1540518614846-7eded433c457?w=800",
-    ],
-    description:
-      "Spacious and comfortable accommodation perfect for students and working professionals. Located in a prime area with easy access to public transport, markets, and educational institutions. The property features modern amenities, 24/7 security, and a friendly environment.",
-    owner: {
-      _id: "owner123",
-      name: "Rajesh Kumar",
-      phone: "+91 98765 43210",
-    },
-    createdAt: "2025-01-15",
-  });
+import { useRouter } from "next/router";
+import { Api } from "../../../services/service";
+import { toast } from "sonner";
+import { userContext } from "../_app";
 
-  const [selectedImage, setSelectedImage] = useState(propertyData.images[0]);
+function PropertyDetails() {
+  const [propertyData, setPropertyData] = useState({});
+  const router = useRouter();
+  const [user] = useContext(userContext);
+  const [selectedImage, setSelectedImage] = useState();
   const [showBookingModal, setShowBookingModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-
-  // Booking form state
+  const [bedError, setBedError] = useState("");
   const [bookingData, setBookingData] = useState({
     visitDate: "",
     bedCountBooked: 1,
@@ -56,73 +30,83 @@ function PropertyDetails() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Handle file upload
-  const handleFileUpload = (e, docType) => {
-    const file = e.target.files[0];
-    if (file) {
-      // In real implementation, upload to server and get URL
-      const fileURL = URL.createObjectURL(file);
-      setBookingData((prev) => ({
-        ...prev,
-        documents: [...prev.documents, { type: docType, url: fileURL, file }],
-      }));
+  useEffect(() => {
+    if (!router.isReady) return;
+
+    const id = router.query.id;
+    console.log(id);
+
+    if (id) {
+      fetchRooms(id);
+      console.log(id);
+    }
+  }, [router.isReady, router.query.id]);
+
+  const fetchRooms = async (roomId) => {
+    try {
+      console.log(roomId);
+      const res = await Api("get", `rooms/getRoom/${roomId}`, "", router);
+
+      if (res?.status) {
+        setPropertyData(res?.data || []);
+        setSelectedImage(res?.data?.images[0]);
+      } else {
+        toast.error(res?.message || "Failed to fetch rooms");
+      }
+    } catch (err) {
+      toast.error(err?.data?.message || err?.message || "An error occurred");
     }
   };
 
-  // Remove document
-  const removeDocument = (index) => {
-    setBookingData((prev) => ({
-      ...prev,
-      documents: prev.documents.filter((_, i) => i !== index),
-    }));
-  };
-
-  // Handle booking submission
   const handleBookingSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate API call
+    if (bookingData.bedCountBooked > propertyData.availableBeds) {
+      setIsSubmitting(false);
+      return toast.error("Selected beds exceed availability");
+    }
+
     try {
+      const total =
+        Number(bookingData.bedCountBooked) * Number(propertyData.pricePerMonth);
+
       const bookingPayload = {
-        room: propertyData._id,
-        owner: propertyData.owner._id,
-        status: "requested",
-        totalAmount: propertyData.pricePerMonth,
+        roomId: propertyData._id,
+        roomPriceAtBooking: propertyData.pricePerMonth,
+        totalAmount: total,
         visitDate: bookingData.visitDate,
         bedCountBooked: bookingData.bedCountBooked,
-        documents: bookingData.documents,
       };
 
       console.log("Booking Payload:", bookingPayload);
 
-      // Simulate API delay
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      const res = await Api("post", "booking/Create", bookingPayload, router);
 
-      setIsSubmitting(false);
-      setShowBookingModal(false);
-      setShowSuccessModal(true);
+      if (res?.status) {
+        setShowBookingModal(false);
+        setShowSuccessModal(true);
 
-      // Reset form
-      setBookingData({
-        visitDate: "",
-        bedCountBooked: 1,
-        documents: [],
-      });
-    } catch (error) {
+        setBookingData({
+          visitDate: "",
+          bedCountBooked: 1,
+          documents: [],
+        });
+      } else {
+        toast.error(res?.message || "Booking failed");
+      }
+    } catch (err) {
+      toast.error(err?.data?.message || err?.message || "An error occurred");
+    } finally {
       setIsSubmitting(false);
-      alert("Booking failed. Please try again.");
     }
   };
 
-  // Navigate to My Bookings
   const goToMyBookings = () => {
     setShowSuccessModal(false);
-    // In real app: router.push('/my-bookings')
     alert("Redirecting to My Bookings page...");
   };
 
-  // Get minimum date (today)
   const getMinDate = () => {
     const today = new Date();
     return today.toISOString().split("T")[0];
@@ -136,10 +120,10 @@ function PropertyDetails() {
           <Home className="w-4 h-4" />
           <span className="font-medium">Home</span>
           <ArrowRight className="w-4 h-4 text-gray-400" />
-          <span className="font-medium">{propertyData.address.city}</span>
+          <span className="font-medium">{propertyData?.city}</span>
           <ArrowRight className="w-4 h-4 text-gray-400" />
           <span className="font-semibold text-orange-600 truncate max-w-xs">
-            {propertyData.propertyName}
+            {propertyData?.propertyName}
           </span>
         </div>
 
@@ -155,17 +139,15 @@ function PropertyDetails() {
                 <div className="flex items-center gap-2 text-gray-600">
                   <MapPin className="w-5 h-5 text-orange-600" />
                   <span className="text-sm md:text-base">
-                    {propertyData.address.city}, {propertyData.address.state} -{" "}
-                    {propertyData.address.pincode}
+                    {propertyData?.city}, {propertyData?.state} -{" "}
+                    {propertyData?.pincode}
                   </span>
                 </div>
               </div>
               <div className="flex flex-col items-start md:items-end">
                 <div className="flex items-center gap-2 text-orange-600 font-bold text-2xl md:text-3xl">
                   <IndianRupee className="w-6 h-6 md:w-8 md:h-8" />
-                  <span>
-                    {propertyData.pricePerMonth.toLocaleString("en-IN")}
-                  </span>
+                  <span>{propertyData?.pricePerMonth}</span>
                 </div>
                 <span className="text-sm text-gray-500 mt-1">per month</span>
               </div>
@@ -188,7 +170,7 @@ function PropertyDetails() {
 
               {/* Thumbnail Images */}
               <div className="grid grid-cols-3 md:grid-cols-1 gap-2">
-                {propertyData.images.map((img, index) => (
+                {propertyData?.images?.map((img, index) => (
                   <div
                     key={index}
                     onClick={() => setSelectedImage(img)}
@@ -225,7 +207,7 @@ function PropertyDetails() {
                   <div>
                     <p className="text-sm text-gray-500">Room Type</p>
                     <p className="font-semibold text-gray-900">
-                      {propertyData.roomType}
+                      {propertyData?.roomType}
                     </p>
                   </div>
                 </div>
@@ -240,7 +222,7 @@ function PropertyDetails() {
                   <div>
                     <p className="text-sm text-gray-500">Gender Allowed</p>
                     <p className="font-semibold text-gray-900">
-                      {propertyData.genderAllowed}
+                      {propertyData?.genderAllowed}
                     </p>
                   </div>
                 </div>
@@ -255,7 +237,7 @@ function PropertyDetails() {
                   <div>
                     <p className="text-sm text-gray-500">Total Beds</p>
                     <p className="font-semibold text-gray-900">
-                      {propertyData.beds.total}
+                      {propertyData?.totalBeds}
                     </p>
                   </div>
                 </div>
@@ -270,7 +252,7 @@ function PropertyDetails() {
                   <div>
                     <p className="text-sm text-gray-500">Available Beds</p>
                     <p className="font-semibold text-green-600">
-                      {propertyData.beds.available}
+                      {propertyData?.availableBeds}
                     </p>
                   </div>
                 </div>
@@ -298,10 +280,10 @@ function PropertyDetails() {
                   <div>
                     <p className="text-sm text-gray-500">Full Address</p>
                     <p className="text-gray-900 font-medium">
-                      {propertyData.address.city}, {propertyData.address.state}
+                      {propertyData?.city}, {propertyData?.state}
                     </p>
                     <p className="text-gray-600 text-sm">
-                      PIN: {propertyData.address.pincode}
+                      PIN: {propertyData?.pincode}
                     </p>
                   </div>
                 </div>
@@ -316,28 +298,34 @@ function PropertyDetails() {
               <p className="mb-4 opacity-90">
                 Schedule a visit to see the property before booking
               </p>
-              <button
-                onClick={() => setShowBookingModal(true)}
-                disabled={propertyData.beds.available === 0}
-                className="bg-white text-orange-600 font-semibold py-3 px-6 rounded-lg hover:bg-gray-100 transition-colors w-full md:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {propertyData.beds.available === 0
-                  ? "No Beds Available"
-                  : "Schedule Visit"}
-              </button>
-              <p className="text-sm mt-2 opacity-75">
-                Contact: {propertyData.owner.phone}
-              </p>
+              <div className="flex flex-col md:flex-row items-center justify-start gap-4">
+                <button
+                  onClick={() => setShowBookingModal(true)}
+                  disabled={propertyData?.availableBeds === 0}
+                  className="bg-white text-orange-600 font-semibold py-3 px-6 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer w-full md:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {propertyData.availableBeds === 0
+                    ? "No Beds Available"
+                    : "Schedule Visit"}
+                </button>
+                <button
+                  onClick={() => router.push("/ContactUs")}
+                  className="bg-white text-orange-600 font-semibold py-3 px-6 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer w-full md:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Contact Us
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
       {showBookingModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-0 p-4">
-          <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="sticky top-0 bg-white border-b border-gray-200 p-4 flex items-center justify-between">
-              <h2 className="text-xl md:text-2xl font-bold text-gray-900">
+        <div className="fixed inset-0 z-9999 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4">
+          <div className="bg-white w-full max-w-2xl rounded-2xl shadow-xl max-h-[90vh] overflow-hidden">
+            {/* Header */}
+            <div className="sticky top-0 z-10 bg-white border-b px-5 py-4 flex items-center justify-between">
+              <h2 className="text-lg md:text-2xl font-bold text-gray-900">
                 Schedule Property Visit
               </h2>
               <button
@@ -348,27 +336,28 @@ function PropertyDetails() {
               </button>
             </div>
 
+            {/* Content */}
             <form
               onSubmit={handleBookingSubmit}
-              className="p-4 md:p-6 space-y-6"
+              className="p-5 md:p-6 space-y-6 overflow-y-auto max-h-[80vh]"
             >
               {/* Property Info */}
-              <div className="bg-orange-50 p-4 rounded-lg">
-                <h3 className="font-semibold text-gray-900 mb-2">
+              <div className="bg-orange-50 border border-orange-100 p-4 rounded-xl">
+                <h3 className="font-semibold text-gray-900">
                   {propertyData.propertyName}
                 </h3>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-gray-600 mt-1">
                   {propertyData.roomType} Room
                 </p>
-                <p className="text-orange-600 font-bold mt-2">
-                  ₹{propertyData.pricePerMonth.toLocaleString("en-IN")}/month
+                <p className="text-orange-600 font-bold text-lg mt-2">
+                  ₹{propertyData.pricePerMonth}/month
                 </p>
               </div>
 
               {/* Visit Date */}
               <div>
                 <label className="block text-sm font-semibold text-gray-900 mb-2">
-                  Select Visit Date <span className="text-red-500">*</span>
+                  Visit Date <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="date"
@@ -381,7 +370,7 @@ function PropertyDetails() {
                       visitDate: e.target.value,
                     }))
                   }
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border text-black rounded-lg focus:ring-2 focus:ring-orange-500"
                 />
               </div>
 
@@ -390,136 +379,80 @@ function PropertyDetails() {
                 <label className="block text-sm font-semibold text-gray-900 mb-2">
                   Number of Beds <span className="text-red-500">*</span>
                 </label>
-                <select
+
+                <input
+                  type="number"
                   required
+                  min={1}
+                  max={propertyData.availableBeds}
                   value={bookingData.bedCountBooked}
-                  onChange={(e) =>
+                  onChange={(e) => {
+                    const value = Number(e.target.value);
+
+                    if (value > propertyData.availableBeds) {
+                      setBedError(
+                        `Only ${propertyData.availableBeds} bed${
+                          propertyData.availableBeds > 1 ? "s" : ""
+                        } available`
+                      );
+                      return;
+                    }
+
+                    setBedError("");
                     setBookingData((prev) => ({
                       ...prev,
-                      bedCountBooked: parseInt(e.target.value),
-                    }))
-                  }
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                >
-                  {[...Array(Math.min(propertyData.beds.available, 5))].map(
-                    (_, i) => (
-                      <option key={i + 1} value={i + 1}>
-                        {i + 1} Bed{i > 0 ? "s" : ""}
-                      </option>
-                    )
-                  )}
-                </select>
+                      bedCountBooked: value,
+                    }));
+                  }}
+                  className={`w-full px-4 py-3 text-black border rounded-lg focus:ring-2 focus:ring-orange-500
+    ${bedError ? "border-red-500" : "border-gray-300"}
+  `}
+                  placeholder="Enter number of beds"
+                />
                 <p className="text-xs text-gray-500 mt-1">
-                  {propertyData.beds.available} beds available
+                  Available Beds:{" "}
+                  <span className="font-semibold text-gray-800">
+                    {propertyData.availableBeds}
+                  </span>
                 </p>
-              </div>
-
-              {/* Documents Upload */}
-              <div>
-                <label className="block text-sm font-semibold text-gray-900 mb-2">
-                  Upload Documents (Optional)
-                </label>
-                <div className="space-y-3">
-                  {/* Aadhar Card */}
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-orange-500 transition-colors">
-                    <label className="cursor-pointer flex items-center gap-2">
-                      <Upload className="w-5 h-5 text-gray-400" />
-                      <span className="text-sm text-gray-600">
-                        Upload Aadhar Card
-                      </span>
-                      <input
-                        type="file"
-                        accept="image/*,.pdf"
-                        onChange={(e) => handleFileUpload(e, "Aadhar")}
-                        className="hidden"
-                      />
-                    </label>
-                  </div>
-
-                  {/* College ID */}
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-orange-500 transition-colors">
-                    <label className="cursor-pointer flex items-center gap-2">
-                      <Upload className="w-5 h-5 text-gray-400" />
-                      <span className="text-sm text-gray-600">
-                        Upload College ID
-                      </span>
-                      <input
-                        type="file"
-                        accept="image/*,.pdf"
-                        onChange={(e) => handleFileUpload(e, "College-ID")}
-                        className="hidden"
-                      />
-                    </label>
-                  </div>
-
-                  {/* Other */}
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-orange-500 transition-colors">
-                    <label className="cursor-pointer flex items-center gap-2">
-                      <Upload className="w-5 h-5 text-gray-400" />
-                      <span className="text-sm text-gray-600">
-                        Upload Other Document
-                      </span>
-                      <input
-                        type="file"
-                        accept="image/*,.pdf"
-                        onChange={(e) => handleFileUpload(e, "Other")}
-                        className="hidden"
-                      />
-                    </label>
-                  </div>
-                </div>
-
-                {/* Uploaded Documents */}
-                {bookingData.documents.length > 0 && (
-                  <div className="mt-4 space-y-2">
-                    <p className="text-sm font-semibold text-gray-900">
-                      Uploaded Documents:
-                    </p>
-                    {bookingData.documents.map((doc, index) => (
-                      <div
-                        key={index}
-                        className="flex items-center justify-between bg-green-50 p-3 rounded-lg"
-                      >
-                        <span className="text-sm text-gray-700">
-                          {doc.type}
-                        </span>
-                        <button
-                          type="button"
-                          onClick={() => removeDocument(index)}
-                          className="text-red-500 hover:text-red-700"
-                        >
-                          <X className="w-4 h-4" />
-                        </button>
-                      </div>
-                    ))}
-                  </div>
+                {bedError && (
+                  <p className="text-xs text-red-500 mt-1">{bedError}</p>
                 )}
               </div>
 
-              {/* Important Note */}
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              {/* Note */}
+              <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
                 <p className="text-sm text-blue-800">
-                  <strong>Note:</strong> This is a visit request only. Payment
-                  will be required after your visit and approval from the owner.
+                  <strong>Note:</strong> This is only a visit request. Payment
+                  will be required after the visit and owner approval.
                 </p>
               </div>
 
-              {/* Submit Button */}
-              <div className="flex gap-3">
+              {/* Actions */}
+              <div className="flex md:flex-row flex-col  gap-3 pt-2">
                 <button
                   type="button"
                   onClick={() => setShowBookingModal(false)}
-                  className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-colors"
+                  className="flex-1 py-3 border rounded-lg font-semibold text-gray-700 hover:bg-gray-50 cursor-pointer"
                 >
                   Cancel
                 </button>
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="flex-1 px-6 py-3 bg-orange-600 text-white font-semibold rounded-lg hover:bg-orange-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {isSubmitting ? "Scheduling..." : "Schedule Visit"}
-                </button>
+                {user?._id ? (
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="flex-1 py-3 bg-orange-600 text-white rounded-lg font-semibold hover:bg-orange-700 disabled:opacity-50 cursor-pointer"
+                  >
+                    {isSubmitting ? "Scheduling..." : "Schedule Visit"}
+                  </button>
+                ) : (
+                  <div
+                    onClick={()=> router.push("/login")}
+                    className="flex-1 py-3 bg-orange-600 text-white rounded-lg font-semibold hover:bg-orange-700 disabled:opacity-50 cursor-pointer text-center"
+                  >
+                    Login to Schedule Visit
+                  </div>
+                )}
               </div>
             </form>
           </div>
