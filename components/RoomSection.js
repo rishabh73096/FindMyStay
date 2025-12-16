@@ -16,8 +16,6 @@ const fadeUp = {
   }),
 };
 
-
-
 export default function PGSection({ rooms }) {
   const router = useRouter();
 
@@ -67,7 +65,8 @@ export default function PGSection({ rooms }) {
                   alt={room.propertyName}
                   width={800}
                   height={400}
-                  className="w-full h-56 object-cover"
+                  className="w-full h-56 object-cover cursor-pointer"
+                  onClick={() => router.push(`/rooms-details/${room._id}`)}
                 />
 
                 {/* Room Type */}
@@ -144,12 +143,12 @@ export default function PGSection({ rooms }) {
 
         {/* View All Button */}
         <div className="text-center mt-12">
-            <button
-              className="bg-transparent border-2 cursor-pointer border-orange-600 text-orange-400 hover:bg-orange-600 hover:text-white px-8 py-3 rounded-lg transition-all duration-300"
-              onClick={()=> router.push("/Rooms")}
-            >
-              View All PGs
-            </button>
+          <button
+            className="bg-transparent border-2 cursor-pointer border-orange-600 text-orange-400 hover:bg-orange-600 hover:text-white px-8 py-3 rounded-lg transition-all duration-300"
+            onClick={() => router.push("/Rooms")}
+          >
+            View All PGs
+          </button>
         </div>
       </div>
     </section>

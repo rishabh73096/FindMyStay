@@ -50,7 +50,7 @@ function FindRooms() {
     <div className="md:max-w-7xl w-full mx-auto px-4 py-16 min-h-screen">
       <div className="border-[2px] border-orange-500 mt-8 rounded-3xl px-4 py-4 bg-white shadow-sm">
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="flex items-center gap-2 w-full md:w-[200px]">
+          <div className="flex items-center gap-2 w-full md:w-[400px]">
             <CiSearch className="text-black text-lg" />
             <input
               type="text"
@@ -61,46 +61,7 @@ function FindRooms() {
 
           <div className="hidden md:block border-l-2 h-8 border-gray-300" />
 
-          <div className="flex items-center gap-2">
-            <FaCalendarAlt className="text-black" />
-
-            <DatePicker
-              selected={checkindate}
-              onChange={(date) => setCheckInDate(date)}
-              minDate={new Date()}
-              placeholderText="Move In"
-              className="w-24 h-10 border rounded-lg text-black text-center"
-            />
-
-            <FaLongArrowAltRight className="text-black hidden md:block" />
-
-            <DatePicker
-              selected={checkoutdate}
-              onChange={(date) => setCheckOutDate(date)}
-              minDate={new Date()}
-              placeholderText="Move Out"
-              className="w-28 h-10 border rounded-lg text-black text-center"
-            />
-          </div>
-
-          <div className="hidden md:block border-l-2 h-8 border-gray-300" />
-
-          <div className="flex items-center gap-3">
-            <FaUsers className="text-black" />
-            <p className="text-black font-medium">Guests</p>
-
-            <div className="flex items-center gap-2">
-              <TiMinus
-                onClick={() => setMaxGuest((p) => (p > 1 ? p - 1 : 1))}
-                className="cursor-pointer border text-lg text-white rounded-full bg-orange-500"
-              />
-              <p className="font-semibold text-black">{maxGuest}</p>
-              <TiPlus
-                onClick={() => setMaxGuest((p) => p + 1)}
-                className="cursor-pointer border text-lg text-white rounded-full bg-orange-500"
-              />
-            </div>
-          </div>
+         
 
           <button className="bg-orange-500 text-white py-2 px-6 rounded-full shadow-md active:scale-95">
             Search
