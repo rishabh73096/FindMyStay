@@ -7,30 +7,25 @@ import { userContext } from "@/pages/_app";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const router = useRouter();
+
   const [user, setUser] = useContext(userContext);
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    console.log(token, user);
-
-    if (user && token) setIsLoggedIn(true);
-  }, []);
+  const isLoggedIn = !!user?._id; // ✅ SINGLE SOURCE
 
   const handleLogout = () => {
-    localStorage.removeItem("authToken");
-    setIsLoggedIn(false);
+    localStorage.removeItem("token");
+    localStorage.removeItem("userDetail");
+    setUser(null); // ✅ IMPORTANT
     router.push("/login");
   };
 
-  const userInitial = user?.name ? user?.name.charAt(0).toUpperCase() : "U";
+  const userInitial = user?.name?.charAt(0)?.toUpperCase();
 
   return (
     <nav className="fixed top-0 left-0 right-0 bg-white backdrop-blur-md z-50 border-b border-orange-200 shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-4">
         <div className="flex justify-between items-center h-16">
-          {/* LOGO */}
           <Link href="/" className="flex items-center space-x-2 cursor-pointer">
             <div className="w-10 h-10 bg-gradient-to-r from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
               <Hotel className="text-white" size={20} />

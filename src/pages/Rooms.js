@@ -5,26 +5,51 @@ import { TiPlus, TiMinus } from "react-icons/ti";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Image from "next/image";
-import { AlertTriangle, Search } from "lucide-react";
+import { ArrowRight, Search } from "lucide-react";
+import { useRouter } from "next/router";
+import Link from "next/link";
+import { toast } from "sonner";
+import { Api } from "../../services/service";
+import { motion } from "framer-motion";
 
 function FindRooms() {
-  const [propertyData, setPropertyData] = useState([]);
   const [checkindate, setCheckInDate] = useState("");
   const [checkoutdate, setCheckOutDate] = useState("");
   const [maxGuest, setMaxGuest] = useState(1);
+  const [rooms, setRooms] = useState([]);
+  const router = useRouter();
 
-  const handleMove = (id) => {
-    router.push(`/tanant_booking/${id}`);
+  useEffect(() => {
+    fetchrooms();
+  }, []);
+
+  const fadeUp = {
+    hidden: { opacity: 0, y: 40 },
+    visible: (i) => ({
+      opacity: 1,
+      y: 0,
+      transition: { delay: i * 0.2, duration: 0.6, ease: "easeOut" },
+    }),
+  };
+
+  const fetchrooms = async () => {
+    try {
+      const res = await Api("get", `rooms/getAll`, "", router);
+      if (res?.status) {
+        const data = res?.data;
+        setRooms(data?.data || []);
+      } else {
+        toast.error(res?.message || "");
+      }
+    } catch (err) {
+      toast.error(err?.data?.message || err?.message || "An error occurred");
+    }
   };
 
   return (
     <div className="md:max-w-7xl w-full mx-auto px-4 py-16 min-h-screen">
-
-      {/* 🔍 Search Box */}
       <div className="border-[2px] border-orange-500 mt-8 rounded-3xl px-4 py-4 bg-white shadow-sm">
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-
-          {/* Location */}
           <div className="flex items-center gap-2 w-full md:w-[200px]">
             <CiSearch className="text-black text-lg" />
             <input
@@ -36,7 +61,6 @@ function FindRooms() {
 
           <div className="hidden md:block border-l-2 h-8 border-gray-300" />
 
-          {/* Dates */}
           <div className="flex items-center gap-2">
             <FaCalendarAlt className="text-black" />
 
@@ -61,7 +85,6 @@ function FindRooms() {
 
           <div className="hidden md:block border-l-2 h-8 border-gray-300" />
 
-          {/* Guests */}
           <div className="flex items-center gap-3">
             <FaUsers className="text-black" />
             <p className="text-black font-medium">Guests</p>
@@ -79,48 +102,100 @@ function FindRooms() {
             </div>
           </div>
 
-          {/* Search Button */}
           <button className="bg-orange-500 text-white py-2 px-6 rounded-full shadow-md active:scale-95">
             Search
           </button>
         </div>
       </div>
 
-      {/* 📌 Property Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
-        {propertyData.map((item) => (
-          <div
-            key={item._id}
-            className="bg-gray-100 rounded-3xl shadow-md overflow-hidden cursor-pointer"
-            onClick={() => handleMove(item.slug)}
+        {rooms.map((room, i) => (
+          <motion.div
+            key={room._id}
+            custom={i}
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="bg-white border border-slate-100 rounded-2xl overflow-hidden shadow-lg hover:shadow-orange-500/20 hover:-translate-y-1 transition-all duration-300"
           >
-            <div className="relative h-48">
+            {/* Image */}
+            <div className="relative">
               <Image
-                src={item.image[0]}
-                width={500}
-                height={500}
-                className="w-full h-full object-cover"
-                alt="PG Rooms"
+                src={room.images?.[0] || "/pg-placeholder.jpg"}
+                alt={room.propertyName}
+                width={800}
+                height={400}
+                className="w-full h-56 object-cover"
               />
+
+              {/* Room Type */}
+              <span className="absolute top-4 left-4 bg-orange-600 text-white text-xs px-3 py-1 rounded-full font-medium">
+                {room.roomType}
+              </span>
+
+              {/* Gender */}
+              <span className="absolute top-4 right-4 bg-black/70 text-white text-xs px-3 py-1 rounded-full">
+                {room.genderAllowed}
+              </span>
             </div>
 
-            <div className="bg-orange-500 text-white px-4 py-2 text-center">
-              <span className="text-sm font-medium">{item.ownername}</span>
-            </div>
+            <div className="p-5">
+              <h3 className="text-lg font-semibold text-gray-700 mb-1 line-clamp-1">
+                {room.propertyName}
+              </h3>
 
-            <div className="px-4 py-3 text-black text-sm">
-              <p className="font-semibold">{item.title}</p>
-              <p className="text-gray-600 mt-1">{item.location}</p>
-              <p className="text-orange-500 font-bold mt-2">
-                ₹ {item.price} / month
+              <p className="text-gray-400 text-sm mb-3">
+                {room.address}, {room.city}, {room.state}
               </p>
+
+              <div className="flex justify-between text-sm text-gray-300 mb-3">
+                <span>
+                  Beds:{" "}
+                  <span className="text-white font-medium">
+                    {room.availableBeds}/{room.totalBeds}
+                  </span>
+                </span>
+                <span
+                  className={`font-medium ${
+                    room.availableBeds > 0 ? "text-green-400" : "text-red-400"
+                  }`}
+                >
+                  {room.availableBeds > 0 ? "Available" : "Full"}
+                </span>
+              </div>
+
+              {room.description && (
+                <p className="text-gray-400 text-sm mb-4 line-clamp-2">
+                  {room.description}
+                </p>
+              )}
+
+              <div className="flex justify-between items-center">
+                <div>
+                  <span className="text-2xl font-bold text-orange-400">
+                    ₹{room.pricePerMonth}
+                  </span>
+                  <span className="text-gray-400 text-sm"> / month</span>
+                </div>
+
+                <Link href={`/rooms-details/${room._id}`}>
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="bg-orange-600 cursor-pointer hover:bg-orange-700 text-white px-5 py-2 rounded-lg text-sm flex items-center gap-2"
+                  >
+                    View Details
+                    <ArrowRight size={14} />
+                  </motion.button>
+                </Link>
+              </div>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
 
-      {/* Empty States */}
-      {propertyData.length === 0 && (
+      {rooms.length === 0 && (
         <EmptyState
           icon={<Search className="w-10 h-10" />}
           title="Search PG Rooms in Indore"

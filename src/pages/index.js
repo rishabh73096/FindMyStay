@@ -6,6 +6,7 @@ import RoomsSection from "../../components/RoomSection";
 import TestimonialsSection from "../../components/TestimonialsSection";
 import { useRouter } from "next/router";
 import { Api } from "../../services/service";
+import { toast } from "sonner";
 
 function Home() {
   const [rooms, setRooms] = useState([]);

@@ -36,11 +36,11 @@ function SignIn(props) {
       props?.loader?.(true);
 
       const res = await Api("post", "auth/login", formData, router);
-      const user = res.data.user;
-      localStorage.setItem("userDetail", JSON.stringify(user));
-      localStorage.setItem("token", res.data.token);
-      setUser(user);
-      toast.success(res.data?.message || "Login Successful");
+      const data = res.data;
+      localStorage.setItem("userDetail", JSON.stringify(data?.user));
+      localStorage.setItem("token", data.token);
+      setUser(data?.user);
+      props.toaster({ type: "sucess", message: "Login Successful" });
       router.push("/");
     } catch (error) {
       toast.error(error?.message || "Something went wrong");

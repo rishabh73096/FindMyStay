@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { MapPin, Calendar, Users, Search } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 const heroImages = [
   "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80", // PG interior
@@ -11,7 +12,7 @@ const heroImages = [
 
 const HeroSection = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-
+  const router = useRouter();
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % heroImages.length);
@@ -99,7 +100,9 @@ const HeroSection = () => {
               </div>
             </div>
 
-            <button className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-4 px-8 rounded-lg transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-2">
+            <button className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-4 px-8 rounded-lg transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-2 cursor-pointer"
+            onClick={() => router.push("/Rooms")}
+            >
               <Search size={20} />
               <span>Search PGs/ hostels </span>
             </button>

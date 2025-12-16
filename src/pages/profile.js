@@ -13,20 +13,11 @@ const EditProfile = ({ loader, toaster }) => {
     address: "",
   });
 
-  const [profilePassword, setProfilePassword] = useState({
-    password: "",
-    confirmPassword: "",
-  });
-
   const [errors, setErrors] = useState({
     username: "",
-    lastname: "",
     email: "",
     country: "",
     number: "",
-    address: "",
-    password: "",
-    confirmPassword: "",
   });
 
   const [user, setUser] = useState(null);
@@ -49,40 +40,14 @@ const EditProfile = ({ loader, toaster }) => {
         if (!/^[A-Za-z\s]+$/.test(value)) return t("Only letters allowed");
         if (value.length < 2) return t("Minimum 2 characters required");
         return "";
-      case "lastname":
-        if (!value.trim()) return t("Last name is required");
-        if (!/^[A-Za-z\s]+$/.test(value)) return t("Only letters allowed");
-        if (value.length < 2) return t("Minimum 2 characters required");
-        return "";
       case "email":
         if (!value.trim()) return t("Email is required");
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
           return t("Invalid email format");
         return "";
-      case "country":
-        if (!value) return t("Country is required");
-        return "";
       case "number":
         if (!value) return t("Phone number is required");
         if (!/^\d{10}$/.test(value)) return t("Must be 10 digits");
-        return "";
-      case "address":
-        if (!value.trim()) return t("Address is required");
-        if (value.length < 10) return t("Address too short");
-        return "";
-      case "password":
-        if (!value && isEditing) return "";
-        if (!value) return t("Password is required");
-        if (value.length < 8) return t("Minimum 8 characters");
-        if (!/[A-Z]/.test(value)) return t("At least one uppercase letter");
-        if (!/[a-z]/.test(value)) return t("At least one lowercase letter");
-        if (!/[0-9]/.test(value)) return t("At least one number");
-        if (!/[^A-Za-z0-9]/.test(value))
-          return t("At least one special character");
-        return "";
-      case "confirmPassword":
-        if (profilePassword.password !== value)
-          return t("Passwords do not match");
         return "";
       default:
         return "";
@@ -91,11 +56,9 @@ const EditProfile = ({ loader, toaster }) => {
 
   const handleInputChange = (name, value) => {
     // Prevent numbers in name fields
-    if ((name === "username" || name === "lastname") && /[0-9]/.test(value)) {
+    if (name === "username" && /[0-9]/.test(value)) {
       return;
     }
-
-    // Prevent non-numeric characters in phone number
     if (name === "number" && value && !/^\d*$/.test(value)) {
       return;
     }
@@ -105,13 +68,11 @@ const EditProfile = ({ loader, toaster }) => {
       [name]: value,
     }));
 
-    // Clear error when typing
     setErrors((prev) => ({
       ...prev,
       [name]: "",
     }));
   };
-
 
   const handleBlur = (name, value) => {
     const error = validateField(name, value);
@@ -124,32 +85,21 @@ const EditProfile = ({ loader, toaster }) => {
   const getProfileData = () => {
     loader(true);
 
-    // if (!token) {
-    //     toaster({ type: "error", message: ("Authentication required") });
-    //     loader(false);
-    //     return;
-    // }
-
-    Api("get", "getProfile", null)
+    Api("get", "auth/profile", null)
       .then((res) => {
         loader(false);
         if (res?.status) {
           setProfileData((prev) => ({
             ...prev,
-            username: res.data.username || "",
+            username: res.data.name || "",
             email: res.data.email || "",
-            lastname: res.data.lastname || "",
-            country: res.data.country || "",
-            number: res.data.number || "",
-            address: res.data.address || "",
+            number: res.data.phone || "",
           }));
-        } else {
-        //   props.toaster({ type: "error", message: res?.data?.message });
         }
       })
       .catch((err) => {
         loader(false);
-        // props.toaster({ type: "error", message: err?.data?.message });
+        props.toaster({ type: "error", message: err?.data?.message });
       });
   };
 
@@ -157,7 +107,6 @@ const EditProfile = ({ loader, toaster }) => {
     let isValid = true;
     const newErrors = {};
 
-    // Validate profile data
     Object.keys(profileData).forEach((key) => {
       const error = validateField(key, profileData[key]);
       if (error) {
@@ -189,15 +138,17 @@ const EditProfile = ({ loader, toaster }) => {
     loader(true);
     const payload = {
       ...profileData,
+      name: profileData?.username,
+      userId: user._id,
     };
 
-    Api("post", "updateProfile", payload)
+    Api("post", "auth/updateProfile", payload)
       .then((res) => {
         loader(false);
         if (res?.status) {
           toaster({
             type: "success",
-            message: t("Profile updated successfully"),
+            message: ("Profile updated successfully"),
           });
           if (res.data) {
             const userDetail = JSON.parse(
@@ -211,7 +162,7 @@ const EditProfile = ({ loader, toaster }) => {
         } else {
           toaster({
             type: "error",
-            message: res?.data?.message || t("Failed to update profile"),
+            message: res?.data?.message || ("Failed to update profile"),
           });
         }
       })
@@ -219,7 +170,7 @@ const EditProfile = ({ loader, toaster }) => {
         loader(false);
         toaster({
           type: "error",
-          message: err?.data?.message || t("Failed to update profile"),
+          message: err?.data?.message || ("Failed to update profile"),
         });
       });
   };
@@ -298,40 +249,6 @@ const EditProfile = ({ loader, toaster }) => {
               )}
             </div>
 
-            {/* Last Name */}
-            <div>
-              <label className="block text-gray-700 mb-1 font-medium">
-                Last Name
-              </label>
-              {isEditing ? (
-                <>
-                  <input
-                    className={`w-full p-3 border rounded-lg text-gray-900 focus:outline-none focus:ring-2 
-                    ${
-                      errors.lastname
-                        ? "border-red-500 focus:ring-red-400"
-                        : "focus:ring-orange-400"
-                    }
-                  `}
-                    value={profileData.lastname}
-                    type="text"
-                    onChange={(e) =>
-                      handleInputChange("lastname", e.target.value)
-                    }
-                    onBlur={(e) => handleBlur("lastname", e.target.value)}
-                  />
-                  {errors.lastname && (
-                    <p className="text-red-500 text-sm mt-1">
-                      {errors.lastname}
-                    </p>
-                  )}
-                </>
-              ) : (
-                <div className="text-gray-900 w-full p-3 border rounded-lg bg-gray-50">
-                  {profileData.lastname || "Not provided"}
-                </div>
-              )}
-            </div>
 
             {/* Email */}
             <div>
@@ -364,39 +281,6 @@ const EditProfile = ({ loader, toaster }) => {
               )}
             </div>
 
-            {/* Country */}
-            <div>
-              <label className="block text-gray-700 mb-1 font-medium">
-                Country
-              </label>
-              {isEditing ? (
-                <>
-                  <CountryDropdown
-                    className={`w-full p-3 border rounded-lg text-gray-900 focus:outline-none focus:ring-2 
-                    ${
-                      errors.country
-                        ? "border-red-500 focus:ring-red-400"
-                        : "focus:ring-orange-400"
-                    }
-                  `}
-                    value={profileData.country}
-                    onChange={(val) => handleInputChange("country", val)}
-                    onBlur={() => handleBlur("country", profileData.country)}
-                  />
-                  {errors.country && (
-                    <p className="text-red-500 text-sm mt-1">
-                      {errors.country}
-                    </p>
-                  )}
-                </>
-              ) : (
-                <div className="text-gray-900 w-full p-3 border rounded-lg bg-gray-50">
-                  {profileData.country || "Not provided"}
-                </div>
-              )}
-            </div>
-
-            {/* Mobile */}
             <div>
               <label className="block text-gray-700 mb-1 font-medium">
                 Mobile

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Star, CheckCircle, ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { useRouter } from "next/router";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 40 },
@@ -15,7 +16,11 @@ const fadeUp = {
   }),
 };
 
+
+
 export default function PGSection({ rooms }) {
+  const router = useRouter();
+
   return (
     <section id="rooms" className="py-20 bg-slate-900 relative overflow-hidden">
       {/* Orange gradient accent */}
@@ -139,15 +144,12 @@ export default function PGSection({ rooms }) {
 
         {/* View All Button */}
         <div className="text-center mt-12">
-          <Link href="/rooms">
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="bg-transparent border-2 border-orange-600 text-orange-400 hover:bg-orange-600 hover:text-white px-8 py-3 rounded-lg transition-all duration-300"
+            <button
+              className="bg-transparent border-2 cursor-pointer border-orange-600 text-orange-400 hover:bg-orange-600 hover:text-white px-8 py-3 rounded-lg transition-all duration-300"
+              onClick={()=> router.push("/Rooms")}
             >
               View All PGs
-            </motion.button>
-          </Link>
+            </button>
         </div>
       </div>
     </section>
