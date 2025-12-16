@@ -135,7 +135,7 @@ const FeedbackForm = (props) => {
               className="flex flex-col justify-start"
             >
               <div className="mb-6">
-                <p className="text-gray-500 text-sm mb-2 font-poppins">
+                <p className="text-gray-200 text-sm mb-2 font-poppins">
                   Home › {("Contact Us")}
                 </p>
                 <h1 className="text-white font-poppins font-light text-[72px] leading-[90px] tracking-normal">
@@ -145,7 +145,7 @@ const FeedbackForm = (props) => {
                 </h1>
               </div>
 
-              <p className="text-gray-700 text-base mb-8 font-poppins">
+              <p className="text-gray-400 text-base mb-8 font-poppins">
                 {(
                   "We're here to help! Whether you have a question about our services or need assistance with your account or want to provide feedback, our team is ready to assist you"
                 )}
@@ -154,7 +154,7 @@ const FeedbackForm = (props) => {
 
               <div className="space-y-4">
                 <div>
-                  <p className="text-gray-700 font-medium mb-1">
+                  <p className="text-gray-300 font-medium mb-1">
                     {("Email")}:
                   </p>
                   <a
@@ -166,7 +166,7 @@ const FeedbackForm = (props) => {
                 </div>
 
                 <div>
-                  <p className="text-gray-700 font-medium mb-1">
+                  <p className="text-gray-300 font-medium mb-1">
                     {("Phone No")}:
                   </p>
                   <a
@@ -187,7 +187,7 @@ const FeedbackForm = (props) => {
               className="flex items-start lg:items-center"
             >
               <form
-                className="bg-orange-100/20 border border-orange-200 backdrop-blur-sm p-6 md:p-8 rounded-3xl w-full shadow-md"
+                className="bg-orange-100 border border-orange-200 backdrop-blur-sm p-6 md:p-8 rounded-3xl w-full shadow-md"
                 onSubmit={submitFeedback}
               >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
