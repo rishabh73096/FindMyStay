@@ -21,8 +21,6 @@ const FeedbackForm = (props) => {
         if (!value.trim()) return "Full name is required";
         if (!/^[A-Za-z\s]+$/.test(value))
           return "Only letters and spaces allowed";
-        if (value.trim().split(/\s+/).length < 2)
-          return "Please enter both first and last name";
         return "";
       case "email":
         if (!value) return "Email is required";
@@ -121,12 +119,11 @@ const FeedbackForm = (props) => {
       <Head>
         <title>Contact Us | Find My Stay</title>
       </Head>
-  
+
       <div className="min-h-[600px] md:mt-5 mt-14 md:mb-0 pb-10 bg-slate-900 pt-14">
-         <div className="absolute inset-0 bg-gradient-to-tr from-orange-600/10 via-transparent to-orange-400/10" />
+        <div className="absolute inset-0 bg-gradient-to-tr from-orange-600/10 via-transparent to-orange-400/10" />
         <div className="container mx-auto px-4 py-2 md:py-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 max-w-7xl mx-auto">
-
             {/* Left Side - Content */}
             <motion.div
               initial={{ opacity: 0, x: -50 }}
@@ -136,27 +133,25 @@ const FeedbackForm = (props) => {
             >
               <div className="mb-6">
                 <p className="text-gray-200 text-sm mb-2 font-poppins">
-                  Home › {("Contact Us")}
+                  Home › {"Contact Us"}
                 </p>
                 <h1 className="text-white font-poppins font-light text-[72px] leading-[90px] tracking-normal">
-                  {("Get in-touch")}
+                  {"Get in-touch"}
                   <br />
-                  {("with us")}!
+                  {"with us"}!
                 </h1>
               </div>
 
               <p className="text-gray-400 text-base mb-8 font-poppins">
-                {(
+                {
                   "We're here to help! Whether you have a question about our services or need assistance with your account or want to provide feedback, our team is ready to assist you"
-                )}
+                }
                 .
               </p>
 
               <div className="space-y-4">
                 <div>
-                  <p className="text-gray-300 font-medium mb-1">
-                    {("Email")}:
-                  </p>
+                  <p className="text-gray-300 font-medium mb-1">{"Email"}:</p>
                   <a
                     href="mailto:contact@bachhoahouston.com"
                     className="text-orange-600 text-lg font-poppins hover:text-orange-700 transition"
@@ -167,7 +162,7 @@ const FeedbackForm = (props) => {
 
                 <div>
                   <p className="text-gray-300 font-medium mb-1">
-                    {("Phone No")}:
+                    {"Phone No"}:
                   </p>
                   <a
                     href="tel:8322309288"
@@ -193,7 +188,7 @@ const FeedbackForm = (props) => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                   <div>
                     <label className="font-poppins text-orange-700 font-medium text-sm block mb-2">
-                      {("Full Name")}
+                      {"Full Name"}
                     </label>
                     <input
                       type="text"
@@ -201,11 +196,12 @@ const FeedbackForm = (props) => {
                       value={formData.fullName}
                       onChange={handleChange}
                       onBlur={handleBlur}
-                      className={`w-full font-poppins px-4 py-3 text-gray-800 bg-white rounded-full outline-none border ${errors.fullName
-                        ? "border-red-500"
-                        : "border-transparent"
-                        } focus:ring-2 focus:ring-orange-500`}
-                      placeholder={("Enter your name")}
+                      className={`w-full font-poppins px-4 py-3 text-gray-800 bg-white rounded-full outline-none border ${
+                        errors.fullName
+                          ? "border-red-500"
+                          : "border-transparent"
+                      } focus:ring-2 focus:ring-orange-500`}
+                      placeholder={"Enter your name"}
                     />
                     {errors.fullName && (
                       <p className="text-red-500 text-sm mt-1">
@@ -216,7 +212,7 @@ const FeedbackForm = (props) => {
 
                   <div>
                     <label className="font-poppins text-orange-700 font-medium text-sm block mb-2">
-                      {("Phone No")}
+                      {"Phone No"}
                     </label>
                     <input
                       type="tel"
@@ -225,11 +221,12 @@ const FeedbackForm = (props) => {
                       onChange={handleChange}
                       onBlur={handleBlur}
                       maxLength={10}
-                      className={`w-full px-4 font-poppins py-3 text-gray-800 bg-white rounded-full outline-none border ${errors.phoneNumber
-                        ? "border-red-500"
-                        : "border-transparent"
-                        } focus:ring-2 focus:ring-orange-500`}
-                      placeholder={("Enter your phone number")}
+                      className={`w-full px-4 font-poppins py-3 text-gray-800 bg-white rounded-full outline-none border ${
+                        errors.phoneNumber
+                          ? "border-red-500"
+                          : "border-transparent"
+                      } focus:ring-2 focus:ring-orange-500`}
+                      placeholder={"Enter your phone number"}
                     />
                     {errors.phoneNumber && (
                       <p className="text-red-500 text-sm mt-1">
@@ -241,7 +238,7 @@ const FeedbackForm = (props) => {
 
                 <div className="mb-4">
                   <label className="text-orange-700 font-medium text-sm block mb-2">
-                    {("Email")}
+                    {"Email"}
                   </label>
                   <input
                     type="email"
@@ -249,22 +246,19 @@ const FeedbackForm = (props) => {
                     value={formData.email}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    className={`w-full px-4 py-3 text-gray-800 bg-white rounded-full outline-none border ${errors.email
-                      ? "border-red-500"
-                      : "border-transparent"
-                      } focus:ring-2 focus:ring-orange-500`}
-                    placeholder={("Enter your email")}
+                    className={`w-full px-4 py-3 text-gray-800 bg-white rounded-full outline-none border ${
+                      errors.email ? "border-red-500" : "border-transparent"
+                    } focus:ring-2 focus:ring-orange-500`}
+                    placeholder={"Enter your email"}
                   />
                   {errors.email && (
-                    <p className="text-red-500 text-sm mt-1">
-                      {errors.email}
-                    </p>
+                    <p className="text-red-500 text-sm mt-1">{errors.email}</p>
                   )}
                 </div>
 
                 <div className="mb-6">
                   <label className="text-orange-700 font-medium text-sm block mb-2">
-                    {("Message")}
+                    {"Message"}
                   </label>
                   <textarea
                     name="query"
@@ -272,11 +266,10 @@ const FeedbackForm = (props) => {
                     value={formData.query}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    className={`w-full px-4 py-3 text-gray-800 bg-white rounded-3xl outline-none resize-none border ${errors.query
-                      ? "border-red-500"
-                      : "border-transparent"
-                      } focus:ring-2 focus:ring-orange-500`}
-                    placeholder={("Enter your message")}
+                    className={`w-full px-4 py-3 text-gray-800 bg-white rounded-3xl outline-none resize-none border ${
+                      errors.query ? "border-red-500" : "border-transparent"
+                    } focus:ring-2 focus:ring-orange-500`}
+                    placeholder={"Enter your message"}
                   ></textarea>
                   {errors.query && (
                     <p className="text-red-500 text-sm mt-1">{errors.query}</p>
@@ -290,7 +283,7 @@ const FeedbackForm = (props) => {
                     type="submit"
                     className="bg-orange-600 hover:bg-orange-700 text-white font-medium py-3 px-8 rounded-full transition-all duration-300"
                   >
-                    {("Send Message")}
+                    {"Send Message"}
                   </motion.button>
                 </div>
               </form>
@@ -298,7 +291,6 @@ const FeedbackForm = (props) => {
           </div>
         </div>
       </div>
- 
     </>
   );
 };
